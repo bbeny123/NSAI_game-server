@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url:
+    username: postgres
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL82Dialect
+    properties.hibernate.temp.use_jdbc_metadata_defaults: false
+    hibernate.ddl-auto: none
+    show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:
+    password:
+    properties:
+      transport.protocol: smtp
+      mail.smtp:
+        auth: true
+        starttls.enable: true
+  mvc:
+    static-path-pattern: /static/**
+    throw-exception-if-no-handler-found: true
+oauth:
+  jwt.key: test
+  client:
+    id: nsai
+    secret: nsai
+  token.validity: 86400
+captcha:
+  url: https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}
+  secret:
+  site:

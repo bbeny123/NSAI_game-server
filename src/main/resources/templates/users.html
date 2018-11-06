@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container mb-2">
+    <!--/*/ <th:block th:include="fragments/menu :: menu"></th:block> /*/-->
+    <script>activateUsers();</script>
+    <!--/*@thymesVar id="usr" type="pl.beny.nsai.dto.UserResponse"*/-->
+    <div class="mt-3">
+        <table id="data" class="table table-striped">
+            <thead>
+            <tr>
+                <th th:text="#{user.id}"></th>
+                <th th:text="#{user.email}"></th>
+                <th th:text="#{user.name}"></th>
+                <th th:text="#{user.city}"></th>
+                <th th:text="#{user.phone}"></th>
+                <th th:text="#{user.active}"></th>
+                <th th:text="#{user.admin}"></th>
+                <th th:text="#{user.user}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="align-middle" th:each="usr : ${users}">
+                <td th:text="${usr.id}"></td>
+                <td th:text="${usr.email}"></td>
+                <td th:text="${usr.name}"></td>
+                <td th:text="${usr.city}"></td>
+                <td th:text="${usr.phone}"></td>
+                <td th:switch="${usr.active}">
+                    <span th:case="true" th:text="#{user.active.active}"></span>
+                    <form th:case="false" th:action="@{'/users/' + ${usr.id} + '/activate'}" method="post">
+                        <button class="btn btn-link p-0 align-baseline" type="submit" th:text="#{user.active.activate}"></button>
+                    </form>
+                </td>
+                <td th:switch="${usr.admin}">
+                    <form th:case="true" th:action="@{'/users/' + ${usr.id} + '/revoke/admin'}" method="post">
+                        <button class="btn btn-link p-0 align-baseline" type="submit" th:text="#{user.revoke}" th:disabled="${usr.id == userId}"></button>
+                    </form>
+                    <form th:case="false" th:action="@{'/users/' + ${usr.id} + '/grant/admin'}" method="post">
+                        <button class="btn btn-link p-0 align-baseline" type="submit" th:text="#{user.grant}" th:disabled="${usr.id == userId}"></button>
+                    </form>
+                </td>
+                <td th:switch="${usr.user}">
+                    <form th:case="true" th:action="@{'/users/' + ${usr.id} + '/revoke/user'}" method="post">
+                        <button class="btn btn-link p-0 align-baseline" type="submit" th:text="#{user.revoke}" th:disabled="${usr.id == userId}"></button>
+                    </form>
+                    <form th:case="false" th:action="@{'/users/' + ${usr.id} + '/grant/user'}" method="post">
+                        <button class="btn btn-link p-0 align-baseline" type="submit" th:text="#{user.grant}" th:disabled="${usr.id == userId}"></button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
