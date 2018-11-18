@@ -16,7 +16,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/rest")
-public class RESTController extends AbstractRESTController {
+public class RegistrationRESTController extends AbstractRESTController {
 
     @Value("${captcha.enable:false}")
     private boolean captcha;
@@ -27,7 +27,7 @@ public class RESTController extends AbstractRESTController {
     private CaptchaUtil captchaUtil;
 
     @Autowired
-    public RESTController(UserService userService, TokenService tokenService, PasswordEncoder encoder, CaptchaUtil captchaUtil) {
+    public RegistrationRESTController(UserService userService, TokenService tokenService, PasswordEncoder encoder, CaptchaUtil captchaUtil) {
         this.userService = userService;
         this.tokenService = tokenService;
         this.encoder = encoder;

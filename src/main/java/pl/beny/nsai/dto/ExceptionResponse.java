@@ -16,6 +16,10 @@ public class ExceptionResponse {
         this.code = ex.getHttpCode();
     }
 
+    public ExceptionResponse(Exception ex) {
+        this.message = ex.getMessage();
+    }
+
     public String getMessage() {
         return message;
     }

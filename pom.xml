@@ -5,7 +5,7 @@
 
     <groupId>pl.beny</groupId>
     <artifactId>nsai</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>NSAI games</name>
@@ -75,6 +75,7 @@
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+            <version>3.0.4.RELEASE</version>
         </dependency>
     </dependencies>
 
