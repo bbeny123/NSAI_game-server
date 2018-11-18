@@ -7,7 +7,7 @@ import pl.beny.nsai.model.User;
 import pl.beny.nsai.model.UserContext;
 import pl.beny.nsai.repository.UserRepository;
 import pl.beny.nsai.util.MailUtil;
-import pl.beny.nsai.util.RentalException;
+import pl.beny.nsai.util.GamesException;
 import pl.beny.nsai.util.RoleUtil;
 
 import java.util.Collections;
@@ -29,8 +29,8 @@ public class UserService extends BaseService<User> {
         return repository.existsByEmail(email);
     }
 
-    public void create(User user) throws RentalException {
-        if (existsByEmail(user.getEmail())) throw new RentalException(RentalException.RentalErrors.USER_EXISTS);
+    public void create(User user) throws GamesException {
+        if (existsByEmail(user.getEmail())) throw new GamesException(GamesException.GamesErrors.USER_EXISTS);
         user.setRoles(Collections.singleton(RoleUtil.findUser()));
         user.setActive(false);
         user.setToken(UUID.randomUUID().toString());
@@ -44,20 +44,20 @@ public class UserService extends BaseService<User> {
         save(user);
     }
 
-    public void activate(UserContext ctx, Long userId) throws RentalException {
+    public void activate(UserContext ctx, Long userId) throws GamesException {
         User user = findOneAdmin(ctx, userId);
         user.setActive(true);
         user.setToken((Token) null);
         save(user);
     }
 
-    public User findByEmail(String email) throws RentalException {
-        return repository.findByEmail(email).orElseThrow(() -> new RentalException(RentalException.RentalErrors.EMAIL_NOT_EXISTS));
+    public User findByEmail(String email) throws GamesException {
+        return repository.findByEmail(email).orElseThrow(() -> new GamesException(GamesException.GamesErrors.EMAIL_NOT_EXISTS));
     }
 
-    public void resendToken(User user) throws RentalException {
+    public void resendToken(User user) throws GamesException {
         if (user.isActive()) {
-            throw new RentalException(RentalException.RentalErrors.USER_ALREADY_ACTIVE);
+            throw new GamesException(GamesException.GamesErrors.USER_ALREADY_ACTIVE);
         }
         user.setToken(UUID.randomUUID().toString());
         user = saveAndFlush(user);
@@ -65,16 +65,16 @@ public class UserService extends BaseService<User> {
     }
 
     @Override
-    public List<User> findAllAdmin(UserContext ctx) throws RentalException {
+    public List<User> findAllAdmin(UserContext ctx) throws GamesException {
         checkAdmin(ctx);
         return repository.findAll();
     }
 
-    public void changeRole(UserContext ctx, Long userId, String action, String role) throws RentalException {
+    public void changeRole(UserContext ctx, Long userId, String action, String role) throws GamesException {
         checkAdmin(ctx);
-        User user = repository.findOneById(userId).orElseThrow(() -> new RentalException(RentalException.RentalErrors.USER_NOT_EXISTS));
+        User user = repository.findOneById(userId).orElseThrow(() -> new GamesException(GamesException.GamesErrors.USER_NOT_EXISTS));
         if (user.getId().equals(ctx.getUser().getId())) {
-            throw new RentalException(RentalException.RentalErrors.NOT_AUTHORIZED);
+            throw new GamesException(GamesException.GamesErrors.NOT_AUTHORIZED);
         }
         if (User.Action.GRANT.equalsIgnoreCase(action)) {
             grantRole(user, role);
@@ -84,7 +84,7 @@ public class UserService extends BaseService<User> {
         saveAdmin(ctx, user);
     }
 
-    private void grantRole(User user, String r) throws RentalException {
+    private void grantRole(User user, String r) throws GamesException {
         if(user.getRoles().stream().noneMatch(role -> role.getRole().getRole().equalsIgnoreCase(r))) {
             user.getRoles().add(RoleUtil.findRole(r));
         }

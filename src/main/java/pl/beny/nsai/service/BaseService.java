@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.beny.nsai.model.UserContext;
 import pl.beny.nsai.repository.BaseRepository;
-import pl.beny.nsai.util.RentalException;
+import pl.beny.nsai.util.GamesException;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public abstract class BaseService<T> {
     }
 
     @Transactional
-    void saveAdmin(UserContext ctx, T data) throws RentalException {
+    void saveAdmin(UserContext ctx, T data) throws GamesException {
         checkAdmin(ctx);
         save(data);
     }
@@ -29,7 +29,7 @@ public abstract class BaseService<T> {
     }
 
     @Transactional
-    public T saveAndFlushAdmin(UserContext ctx, T data) throws RentalException {
+    public T saveAndFlushAdmin(UserContext ctx, T data) throws GamesException {
         checkAdmin(ctx);
         return saveAndFlush(data);
     }
@@ -39,7 +39,7 @@ public abstract class BaseService<T> {
         return repository.saveAndFlush(data);
     }
 
-    public List<T> findAllAdmin(UserContext ctx) throws RentalException {
+    public List<T> findAllAdmin(UserContext ctx) throws GamesException {
         checkAdmin(ctx);
         return findAll();
     }
@@ -48,18 +48,18 @@ public abstract class BaseService<T> {
         return repository.findAll();
     }
 
-    T findOneAdmin(UserContext ctx, Long id) throws RentalException {
+    T findOneAdmin(UserContext ctx, Long id) throws GamesException {
         checkAdmin(ctx);
         return findOne(id);
     }
 
 
-    T findOne(Long id) throws RentalException {
-        return repository.findById(id).orElseThrow(() -> new RentalException(RentalException.RentalErrors.ITEM_NOT_EXISTS));
+    T findOne(Long id) throws GamesException {
+        return repository.findById(id).orElseThrow(() -> new GamesException(GamesException.GamesErrors.ITEM_NOT_EXISTS));
     }
 
-    void checkAdmin(UserContext ctx) throws RentalException {
-        if (!ctx.isAdmin()) throw new RentalException(RentalException.RentalErrors.NOT_AUTHORIZED);
+    void checkAdmin(UserContext ctx) throws GamesException {
+        if (!ctx.isAdmin()) throw new GamesException(GamesException.GamesErrors.NOT_AUTHORIZED);
     }
 
 }

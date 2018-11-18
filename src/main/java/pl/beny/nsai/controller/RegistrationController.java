@@ -12,7 +12,7 @@ import pl.beny.nsai.dto.RegistrationRequest;
 import pl.beny.nsai.service.TokenService;
 import pl.beny.nsai.service.UserService;
 import pl.beny.nsai.util.CaptchaUtil;
-import pl.beny.nsai.util.RentalException;
+import pl.beny.nsai.util.GamesException;
 
 import javax.validation.Valid;
 
@@ -43,7 +43,7 @@ public class RegistrationController extends BaseController {
 		if (isAuthenticated()) {
 			return redirect;
 		}
-		if (!captchaUtil.checkCaptcha(captchaResponse)) throw new RentalException(RentalException.RentalErrors.CAPTCHA_ERROR);
+		if (!captchaUtil.checkCaptcha(captchaResponse)) throw new GamesException(GamesException.GamesErrors.CAPTCHA_ERROR);
 	    userService.create(userRequest.getUser(encoder));
 	    return responseInfo("login", model, "info.registered");
 	}

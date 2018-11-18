@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.beny.nsai.model.Role;
 import pl.beny.nsai.repository.RoleRepository;
-import pl.beny.nsai.util.RentalException;
+import pl.beny.nsai.util.GamesException;
 
 @Service
 public class RoleService extends BaseService<Role> {
@@ -17,8 +17,8 @@ public class RoleService extends BaseService<Role> {
         this.repository = repository;
     }
 
-    public Role findByRole(Role.Roles role) throws RentalException {
-        return repository.findByRole(role).orElseThrow(() -> new RentalException(RentalException.RentalErrors.ROLE_NOT_EXISTS));
+    public Role findByRole(Role.Roles role) throws GamesException {
+        return repository.findByRole(role).orElseThrow(() -> new GamesException(GamesException.GamesErrors.ROLE_NOT_EXISTS));
     }
 
 }

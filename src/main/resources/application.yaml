@@ -28,6 +28,7 @@ oauth:
     secret: nsai
   token.validity: 86400
 captcha:
+  enable: false
   url: https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}
   secret:
   site:

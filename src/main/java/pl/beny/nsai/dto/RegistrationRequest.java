@@ -15,6 +15,7 @@ public class RegistrationRequest {
     private String lastName;
     private String city;
     private String phone;
+    private String captchaResponse;
 
     @NotEmpty
     @Email
@@ -37,7 +38,6 @@ public class RegistrationRequest {
         this.password = password;
     }
 
-    @NotEmpty
     @Length(max = 60)
     public String getFirstName() {
         return firstName;
@@ -47,7 +47,6 @@ public class RegistrationRequest {
         this.firstName = firstName;
     }
 
-    @NotEmpty
     @Length(max = 60)
     public String getLastName() {
         return lastName;
@@ -57,7 +56,6 @@ public class RegistrationRequest {
         this.lastName = lastName;
     }
 
-    @NotEmpty
     @Length(max = 60)
     public String getCity() {
         return city;
@@ -74,6 +72,14 @@ public class RegistrationRequest {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getCaptchaResponse() {
+        return captchaResponse;
+    }
+
+    public void setCaptchaResponse(String captchaResponse) {
+        this.captchaResponse = captchaResponse;
     }
 
     public User getUser(PasswordEncoder encoder) {

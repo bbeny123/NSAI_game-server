@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import pl.beny.nsai.model.UserContext;
-import pl.beny.nsai.util.RentalException;
+import pl.beny.nsai.util.GamesException;
 
 import java.util.stream.Collectors;
 
@@ -38,10 +38,11 @@ public abstract class BaseController {
         this.listView = listView;
     }
 
-    @ExceptionHandler(RentalException.class)
-    public RedirectView rentalException(RentalException ex, RedirectAttributes attributes) {
+    @ExceptionHandler(GamesException.class)
+    public RedirectView rentalException(GamesException ex, RedirectAttributes attributes) {
         logger.warn(ex.getMessage());
-        return responseInfo(ex.getUrl() != null ? ex.getUrl() : url, attributes, ex.getMessageSource());
+        return responseInfo(url, attributes, null);
+//        return responseInfo(ex.getUrl() != null ? ex.getUrl() : url, attributes, ex.getMessageSource());
     }
 
     @ExceptionHandler(BindException.class)

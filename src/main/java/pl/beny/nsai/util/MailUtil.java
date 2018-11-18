@@ -20,7 +20,7 @@ public class MailUtil {
     }
 
     public static void sendActivationEmail(String email, String token) {
-        String URL = "http://localhost:8080/register/activate?token=" + token;
+        String URL = "http://localhost:4200/register/activate?token=" + token;
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject(messageSource.getMessage("registration.email.subject", new Object[]{URL}, LocaleContextHolder.getLocale()));
