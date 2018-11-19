@@ -28,4 +28,8 @@ public abstract class AbstractRESTController {
         return ResponseEntity.ok().build();
     }
 
+    protected <T> ResponseEntity<?> ok(T t) {
+        return ResponseEntity.ok(t);
+    }
+
 }
