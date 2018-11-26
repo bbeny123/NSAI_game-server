@@ -37,13 +37,13 @@ public class User {
     @Column(name = "USR_PASSWORD", nullable = false)
     private String password;
 
-    @Column(name = "USR_FIRST_NAME", length = 60, nullable = false)
+    @Column(name = "USR_FIRST_NAME", length = 60)
     private String firstName;
 
-    @Column(name = "USR_LAST_NAME", length = 60, nullable = false)
+    @Column(name = "USR_LAST_NAME", length = 60)
     private String lastName;
 
-    @Column(name = "USR_CITY", length = 60, nullable = false)
+    @Column(name = "USR_CITY", length = 60)
     private String city;
 
     @Column(name = "USR_PHONE", length = 30)

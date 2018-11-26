@@ -24,7 +24,16 @@ public class GamesException extends Exception {
         BATTLESHIP_NOT_BATTLE(16, "You can not fire outside BATTLE phase", HttpStatus.BAD_REQUEST),
         BATTLESHIP_DIAGONAL(17, "You can not place ships diagonally", HttpStatus.BAD_REQUEST),
 
-        BATTLESHIP_AI_ERROR(99, "Sorry, our OLO AI is dumb as ...", HttpStatus.INTERNAL_SERVER_ERROR);
+        CHECKERS_NO_MAN(18, "There is no man at this position", HttpStatus.BAD_REQUEST),
+        CHECKERS_OPPOSITE_MAN(19, "This is no player's man", HttpStatus.BAD_REQUEST),
+        CHECKERS_POSITION_TAKEN(20, "This position is already taken", HttpStatus.BAD_REQUEST),
+        CHECKERS_POSITION_PROHIBITED(21, "This position is prohibited", HttpStatus.BAD_REQUEST),
+        CHECKERS_CAPTURE_FORCED(22, "This man is forced to capture", HttpStatus.BAD_REQUEST),
+        CHECKERS_COMPUTER_TURN(23, "Computer turn", HttpStatus.BAD_REQUEST),
+        CHECKERS_PLAYER_TURN(24, "Player turn", HttpStatus.BAD_REQUEST),
+        CHECKERS_ERROR(25, "Internal OLO error", HttpStatus.INTERNAL_SERVER_ERROR),
+
+        AI_ERROR(99, "Sorry, our OLO AI is dumb as ...", HttpStatus.INTERNAL_SERVER_ERROR);
 
         private int code;
         private String message;

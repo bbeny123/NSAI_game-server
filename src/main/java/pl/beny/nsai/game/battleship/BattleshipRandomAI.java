@@ -24,7 +24,7 @@ public class BattleshipRandomAI {
                 }
             }
         }
-        throw new GamesException(GamesErrors.BATTLESHIP_AI_ERROR);
+        throw new GamesException(GamesErrors.AI_ERROR);
     }
 
     public static BattleshipFireResponse fire(BattleshipBoard board) {
