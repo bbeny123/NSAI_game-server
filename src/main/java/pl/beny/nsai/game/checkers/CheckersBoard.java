@@ -1,252 +1,257 @@
 package pl.beny.nsai.game.checkers;
 
-import pl.beny.nsai.game.checkers.Checkers.Side;
-import pl.beny.nsai.game.checkers.CheckersResult.Turn;
+import pl.beny.nsai.game.checkers.CheckersMan.Side;
+import pl.beny.nsai.game.checkers.CheckersMan.Type;
 import pl.beny.nsai.util.GamesException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.stream.Collectors;
 
-import static pl.beny.nsai.game.checkers.Checkers.Side.BLACK;
-import static pl.beny.nsai.game.checkers.Checkers.Side.WHITE;
-import static pl.beny.nsai.game.checkers.CheckersBoard.BoardStatus.*;
-import static pl.beny.nsai.game.checkers.CheckersMan.Type.MAN;
-import static pl.beny.nsai.game.checkers.CheckersMan.Type.QUEEN;
+import static pl.beny.nsai.game.checkers.Checkers.Status.BLACK_TURN;
+import static pl.beny.nsai.game.checkers.Checkers.Status.WHITE_TURN;
+import static pl.beny.nsai.game.checkers.CheckersMan.Side.BLACK;
+import static pl.beny.nsai.game.checkers.CheckersMan.Side.WHITE;
+import static pl.beny.nsai.game.checkers.CheckersMan.Type.*;
 import static pl.beny.nsai.util.GamesException.GamesErrors.*;
 
 public class CheckersBoard {
 
-    private int[][] board = new int[7][7];
-
-    public interface BoardStatus {
-        int PROHIBITED = -1;
-        int NOTHING = 0;
-        int WHITE_MAN = 1;
-        int WHITE_QUEEN = 2;
-        int BLACK_MAN = 3;
-        int BLACK_QUEEN = 4;
-    }
+    private CheckersMan[][] board = new CheckersMan[7][7];
 
     public CheckersBoard() {
         initBoard();
     }
 
+    private CheckersBoard(CheckersMan[][] board) {
+        this.board = board;
+        for (int i = 0; i < 8; i++) {
+            for (int j = i % 2; j < 8; j += 2) {
+                if (board(i,j) != null) {
+                    this.board[i][j] = board[i][j].copy();
+                }
+            }
+        }
+    }
 
     private void initBoard() {
         for (int i = 0; i < 8; i++) {
             for (int j = (i + 1) % 2; j < 8; j += 2) {
-                board[i][j] = PROHIBITED;
+                board[i][j] = new CheckersMan(i, j, null, PROHIBITED);
             }
         }
 
         for (int i = 0; i < 3; i++) {
             for (int j = i % 2; j < 8; j += 2) {
-                board[i][j] = BLACK_MAN;
+                board[i][j] = new CheckersMan(i, j, BLACK, MAN);
             }
         }
 
         for (int i = 7; i > 4; i--) {
             for (int j = i % 2; j < 8; j += 2) {
-                board[i][j] = WHITE_MAN;
+                board[i][j] = new CheckersMan(i, j, WHITE, MAN);
             }
         }
     }
 
-    private CheckersMan getMan(int x, int y) {
-        switch (board[x][y]) {
-            case WHITE_MAN:
-                return new CheckersMan(x, y, WHITE, MAN);
-            case WHITE_QUEEN:
-                return new CheckersMan(x, y, WHITE, QUEEN);
-            case BLACK_MAN:
-                return new CheckersMan(x, y, BLACK, MAN);
-            case BLACK_QUEEN:
-                return new CheckersMan(x, y, BLACK, QUEEN);
-        }
-        return null;
+    private CheckersMan board(int x, int y) {
+        return board[x][y];
     }
 
-    public CheckersResult move(int x1, int y1, int x2, int y2, int turn) throws GamesException {
-        return move(getMan(x1, y1), new CheckersMan(x2, y2), turn);
+    private CheckersMan board(CheckersMan men) {
+        return board[men.x][men.y];
     }
 
-    public CheckersResult move(CheckersMan source, CheckersMan target, int turn) throws GamesException {
-        if (source == null) {
+    public CheckersResult move(int x1, int y1, int x2, int y2, Side side) throws GamesException {
+        return move(board(x1, y1), new CheckersMan(x2, y2), side);
+    }
+
+    private CheckersResult move(CheckersMan source, CheckersMan target, Side side) throws GamesException {
+        if (source == null || source.type == PROHIBITED) {
             throw new GamesException(CHECKERS_NO_MAN);
         }
 
-        if (turn == Turn.PLAYER && source.side != WHITE) {
+        if (side != source.side) {
             throw new GamesException(CHECKERS_OPPOSITE_MAN);
-        } else if (turn == Turn.COMPUTER && source.side != BLACK) {
-            throw new GamesException(CHECKERS_ERROR);
         }
 
-        if (board(target) == PROHIBITED) {
+        if (board(target) != null && board(target).type == PROHIBITED) {
             throw new GamesException(CHECKERS_POSITION_PROHIBITED);
-        }
-
-        if (board(target) != NOTHING) {
+        } else if (board(target) != null) {
             throw new GamesException(CHECKERS_POSITION_TAKEN);
         }
 
-        List<CheckersMan> captures = getPossibleCaptures(source);
+        List<CheckersMan> possibleCaptures = getPossibleCaptures(source);
 
         CheckersResult result = new CheckersResult();
-        result.setTurn(turn == Turn.PLAYER ? Turn.COMPUTER : Turn.PLAYER);
+        result.setStatus(side == WHITE ? BLACK_TURN : WHITE_TURN);
 
-        if (!captures.isEmpty()) {
-            if (captures.stream().noneMatch(capture -> target.x == capture.x && target.y == capture.y)) {
-                throw new GamesException(CHECKERS_CAPTURE_FORCED);
-            } else {
-                result.setCaptured(capture(source, target));
-                result.setTurn(turn);
-                board[target.x][target.y] = getBoardStatus(source);
-                List<CheckersMan> forceToCapture = getPossibleCaptures(getMan(target.x, target.y));
-
-                if(!forceToCapture.isEmpty()) {
-                    result.setForceToCapture(new CheckersForcedCapture(getMan(target.x, target.y), forceToCapture));
-                }
-            }
+        if (!possibleCaptures.isEmpty() && possibleCaptures.stream().noneMatch(capture -> target.x == capture.x && target.y == capture.y)) {
+            throw new GamesException(CHECKERS_CAPTURE_FORCED);
+        } else if (!possibleCaptures.isEmpty()) {
+            capture(source, target, result, side);
         } else {
-            board[target.x][target.y] = getBoardStatus(source);
+            moveAllowed(source, target, side);
+            move(source, target);
         }
-        removeFromBoard(source);
 
         return result;
     }
 
+    private void capture(CheckersMan source, CheckersMan target, CheckersResult result, Side side) throws GamesException {
+        result.setPlayerCaptured(capture(source, target));
+        result.setStatus(side == WHITE ? WHITE_TURN : BLACK_TURN);
+
+        move(source, target);
+
+        List<CheckersMan> forceToCapture = getPossibleCaptures(board(target));
+        if(!forceToCapture.isEmpty()) {
+            result.setForceToCapture(new CheckersForcedCapture(board(target), forceToCapture));
+        }
+    }
+
     private CheckersMan capture(CheckersMan source, CheckersMan target) throws GamesException {
-        CheckersMan captured = getMan((source.x + target.x) / 2, (source.y + target.y) / 2);
+        CheckersMan captured = board((source.x + target.x) / 2, (source.y + target.y) / 2);
 
         if (captured == null) {
             throw new GamesException(CHECKERS_ERROR);
         }
 
-        removeFromBoard(captured);
+        board[captured.x][captured.y] = null;
         return captured;
     }
 
-    private int getBoardStatus(CheckersMan man) throws GamesException {
-        if (man.side == WHITE && man.type == MAN) return WHITE_MAN;
-        else if (man.side == WHITE && man.type == QUEEN) return WHITE_QUEEN;
-        else if (man.side == BLACK && man.type == MAN) return BLACK_MAN;
-        else if (man.side == BLACK && man.type == QUEEN) return BLACK_QUEEN;
-        else throw new GamesException(CHECKERS_ERROR);
+    private void moveAllowed(CheckersMan source, CheckersMan target, Side side) throws GamesException {
+        if (Math.abs(target.x - source.x) != 1 || Math.abs(target.y - source.y) != 1 || (source.type != QUEEN && ((side == WHITE && target.y >= source.y) || (side == BLACK && target.y <= source.y)))) {
+            throw new GamesException(CHECKERS_NOT_ALLOWED);
+        }
     }
 
-    private void removeFromBoard(CheckersMan man) {
-        board[man.x][man.y] = NOTHING;
+    private void move(CheckersMan source, CheckersMan target) {
+        board[source.x][source.y] = null;
+        board[target.x][target.y] = source;
+        source.move(target);
     }
 
-    private int board(CheckersMan men) {
-        return board[men.x][men.y];
+    public List<CheckersPossibleMoves> getPossibleMoves(Side side) {
+        List<CheckersPossibleMoves> moves = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = i % 2; j < 8; j += 2) {
+                if (board(i,j) != null && board(i,j).side == side) {
+                    List<CheckersMan> men = getPossibleMoves(board(i, j));
+                    if (!men.isEmpty()) {
+                        moves.add(new CheckersPossibleMoves(board(i, j), men));
+                    }
+                }
+            }
+        }
+        return moves;
     }
 
-    public List<CheckersMan> getPossibleCaptures(CheckersMan man) {
+    private List<CheckersMan> getPossibleMoves(CheckersMan source) {
+        List<CheckersMan> men = new ArrayList<>();
+
+        if (source.whiteOrQueen() && source.x - 1 >= 0 && source.y - 1 >= 0 && board(source.x - 1, source.y - 1) == null) {
+            men.add(new CheckersMan(source.x - 1, source.y - 1));
+        }
+        if (source.whiteOrQueen() && source.x + 1 <= 7 && source.y - 1 >= 0 && board(source.x + 1, source.y - 1) == null) {
+            men.add(new CheckersMan(source.x + 1, source.y - 1));
+        }
+        if (source.blackOrQueen() && source.x - 1 >= 0 && source.y + 1 <= 7 && board(source.x - 1, source.y + 1) == null) {
+            men.add(new CheckersMan(source.x - 1, source.y + 1));
+        }
+        if (source.blackOrQueen() && source.x + 1 <= 7 && source.y + 1 <= 7 && board(source.x + 1, source.y + 1) == null) {
+            men.add(new CheckersMan(source.x + 1, source.y + 1));
+        }
+
+        return men;
+    }
+
+    public List<CheckersPossibleMoves> getPossibleCaptures(Side side) {
+        List<CheckersPossibleMoves> moves = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = i % 2; j < 8; j += 2) {
+                if (board(i, j) != null && board(i, j).side == side) {
+                    List<CheckersMan> possibleCaptures = getPossibleCaptures(board(i, j));
+                    if (!possibleCaptures.isEmpty()) {
+                        moves.add(new CheckersPossibleMoves(board(i, j), possibleCaptures));
+                    }
+                }
+            }
+        }
+        return moves;
+    }
+
+    private List<CheckersMan> getPossibleCaptures(CheckersMan source) {
         List<CheckersMan> men = new ArrayList<>();
 
         //UPPER LEFT
-        if (man.whiteOrQueen() && man.x - 2 >= 0 && man.y - 2 >= 0 && board[man.x - 2][man.y - 2] == NOTHING) {
-            CheckersMan temp = getMan(man.x - 1, man.y - 1);
-            if (temp != null && man.side != temp.side) {
-                men.add(temp);
+        if (source.whiteOrQueen() && source.x - 2 >= 0 && source.y - 2 >= 0 && board(source.x - 2, source.y - 2) == null) {
+            CheckersMan man = board(source.x - 1, source.y - 1);
+            if (man != null && source.side != man.side) {
+                men.add(man);
             }
         }
 
         //UPPER RIGHT
-        if (man.whiteOrQueen() && man.x + 2 <= 7 && man.y - 2 >= 0 && board[man.x + 2][man.y - 2] == NOTHING) {
-            CheckersMan temp = getMan(man.x + 1, man.y - 1);
-            if (temp != null && man.side != temp.side) {
-                men.add(temp);
+        if (source.whiteOrQueen() && source.x + 2 <= 7 && source.y - 2 >= 0 && board(source.x + 2, source.y - 2) == null) {
+            CheckersMan man = board(source.x + 1, source.y - 1);
+            if (man != null && source.side != man.side) {
+                men.add(man);
             }
         }
 
         //BOTTOM LEFT
-        if (man.blackOrQueen() && man.x - 2 >= 0 && man.y + 2 <= 7 && board[man.x - 2][man.y + 2] == NOTHING) {
-            CheckersMan temp = getMan(man.x - 1, man.y + 1);
-            if (temp != null && man.side != temp.side) {
-                men.add(temp);
+        if (source.blackOrQueen() && source.x - 2 >= 0 && source.y + 2 <= 7 && board(source.x - 2, source.y + 2) == null) {
+            CheckersMan man = board(source.x - 1, source.y + 1);
+            if (man != null && source.side != man.side) {
+                men.add(man);
             }
         }
 
         //BOTTOM RIGHT
-        if (man.blackOrQueen() && man.x + 2 <= 7 && man.y + 2 <= 7 && board[man.x + 2][man.y + 2] == NOTHING) {
-            CheckersMan temp = getMan(man.x + 1, man.y + 1);
-            if (temp != null && man.side != temp.side) {
-                men.add(temp);
+        if (source.blackOrQueen() && source.x + 2 <= 7 && source.y + 2 <= 7 && board(source.x + 2, source.y + 2) == null) {
+            CheckersMan man = board(source.x + 1, source.y + 1);
+            if (man != null && source.side != man.side) {
+                men.add(man);
             }
         }
 
         return men;
     }
 
+    public boolean moveOrCapturePossible(Side side) {
+        return !getPossibleMoves(side).isEmpty() || !getPossibleCaptures(side).isEmpty();
+    }
+
     public void checkForcedCapture(int x1, int y1, int x2, int y2, CheckersForcedCapture forcedCapture) throws GamesException {
-        if (forcedCapture.getSource().x != x1 || forcedCapture.getSource().y != y1 || forcedCapture.getToCapture().stream().noneMatch(capture -> capture.x == x2 && capture.y == y2)) {
+        if (forcedCapture.getSource().x != x1 || forcedCapture.getSource().y != y1 || forcedCapture.getPossibleCaptures().stream().noneMatch(capture -> capture.x == x2 && capture.y == y2)) {
             throw new GamesException(CHECKERS_CAPTURE_FORCED);
         }
     }
 
-    public List<CheckersMove> getPossibleMoves(Side side) {
-        List<CheckersMove> moves = new ArrayList<>();
+    public List<CheckersMan> getAllCheckers() {
+        List<CheckersMan> men = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int j = i % 2; j < 8; j += 2) {
-                List<CheckersMan> men = new ArrayList<>();
-                if ((side == WHITE && (board[i][j] == WHITE_MAN || board[i][j] == WHITE_QUEEN)) || (side == BLACK && board[i][j] == BLACK_QUEEN)) {
-                    if (i - 1 >= 0 && j - 1 >= 0 && board[i - 1][j - 1] == NOTHING) {
-                        men.add(new CheckersMan(i - 1, j - 1));
-                    } else if (i + 1 <= 7 && j - 1 >= 0 && board[i + 1][j - 1] == NOTHING) {
-                        men.add(new CheckersMan(i + 1, j - 1));
-                    }
-                }
-                if ((side == BLACK && (board[i][j] == BLACK_MAN || board[i][j] == BLACK_QUEEN)) || (side == WHITE && board[i][j] == WHITE_QUEEN)) {
-                    if (i - 1 >= 0 && j + 1 <= 7 && board[i - 1][j + 1] == NOTHING) {
-                        men.add(new CheckersMan(i - 1, j + 1));
-                    } else if (i + 1 <= 7 && j + 1 <= 7 && board[i + 1][j + 1] == NOTHING) {
-                        men.add(new CheckersMan(i + 1, j + 1));
-                    }
-                }
-                if (!men.isEmpty()) {
-                    CheckersMan source = new CheckersMan(i, j, side, Arrays.asList(WHITE_MAN, BLACK_MAN).contains(board[i][j]) ? MAN : QUEEN);
-                    moves.add(new CheckersMove(source, men));
+                if (board(i,j) != null) {
+                    men.add(board(i,j));
                 }
             }
         }
-        return moves;
+        return men;
     }
 
-    public List<CheckersMove> getPossibleCaptures(Side side) {
-        List<CheckersMove> moves = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = i % 2; j < 8; j += 2) {
-                CheckersMan man = getMan(i, j);
-                if (man != null && man.side == side) {
-                    List<CheckersMan> men = getPossibleCaptures(man);
-                    if (!men.isEmpty()) {
-                        moves.add(new CheckersMove(man, men));
-                    }
-                }
-            }
-        }
-        return moves;
+    public List<CheckersMan> getCheckers(Side side) {
+        return getAllCheckers().stream().filter(checker -> checker.side == side).collect(Collectors.toList());
     }
 
-    public CheckersMove randomMove(CheckersForcedCapture forcedCapture, Side side) {
-        if (forcedCapture != null) {
-            return new CheckersMove(forcedCapture.getSource(), forcedCapture.getToCapture());
-        }
+    public List<CheckersMan> getCheckers(Side side, Type type) {
+        return getCheckers(side).stream().filter(checker -> checker.side == side && checker.type == type).collect(Collectors.toList());
+    }
 
-        List<CheckersMove> moves = getPossibleMoves(side);
-        List<CheckersMove> captures = getPossibleCaptures(side);
-
-        if (new Random().nextInt(2) == 0 && !captures.isEmpty()) {
-            return captures.get(new Random().nextInt(captures.size()));
-        } else if (!moves.isEmpty()) {
-            return moves.get(new Random().nextInt(moves.size()));
-        } else {
-            return null;
-        }
+    public CheckersBoard copy() {
+        return new CheckersBoard(this.board);
     }
 
 }

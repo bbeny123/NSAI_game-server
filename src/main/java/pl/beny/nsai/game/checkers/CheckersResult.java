@@ -1,37 +1,22 @@
 package pl.beny.nsai.game.checkers;
 
-import static pl.beny.nsai.game.checkers.CheckersResult.Turn.COMPUTER;
+import static pl.beny.nsai.game.checkers.Checkers.Status.WHITE_TURN;
 
 public class CheckersResult {
 
-    public interface Turn {
-        public int PLAYER = 0;
-        public int COMPUTER = 1;
-        public int PLAYER_WON = 2;
-        public int COMPUTER_WON = 3;
-    }
-
-    private CheckersMan captured;
-    private int turn = COMPUTER;
+    private CheckersMan playerCaptured;
     private CheckersForcedCapture forceToCapture;
-    private CheckersMan source;
-    private CheckersMan target;
+    private CheckersMan computerSource;
+    private CheckersMan computerTarget;
     private CheckersMan computerCaptured;
+    private int status = WHITE_TURN;
 
-    public CheckersMan getCaptured() {
-        return captured;
+    public CheckersMan getPlayerCaptured() {
+        return playerCaptured;
     }
 
-    public void setCaptured(CheckersMan captured) {
-        this.captured = captured;
-    }
-
-    public int getTurn() {
-        return turn;
-    }
-
-    public void setTurn(int turn) {
-        this.turn = turn;
+    public void setPlayerCaptured(CheckersMan playerCaptured) {
+        this.playerCaptured = playerCaptured;
     }
 
     public CheckersForcedCapture getForceToCapture() {
@@ -42,20 +27,20 @@ public class CheckersResult {
         this.forceToCapture = forceToCapture;
     }
 
-    public CheckersMan getSource() {
-        return source;
+    public CheckersMan getComputerSource() {
+        return computerSource;
     }
 
-    public void setSource(CheckersMan source) {
-        this.source = source;
+    public void setComputerSource(CheckersMan computerSource) {
+        this.computerSource = computerSource;
     }
 
-    public CheckersMan getTarget() {
-        return target;
+    public CheckersMan getComputerTarget() {
+        return computerTarget;
     }
 
-    public void setTarget(CheckersMan target) {
-        this.target = target;
+    public void setComputerTarget(CheckersMan computerTarget) {
+        this.computerTarget = computerTarget;
     }
 
     public CheckersMan getComputerCaptured() {
@@ -64,5 +49,13 @@ public class CheckersResult {
 
     public void setComputerCaptured(CheckersMan computerCaptured) {
         this.computerCaptured = computerCaptured;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

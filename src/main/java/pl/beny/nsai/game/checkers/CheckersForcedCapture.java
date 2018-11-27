@@ -5,11 +5,11 @@ import java.util.List;
 public class CheckersForcedCapture {
 
     private CheckersMan source;
-    private List<CheckersMan> toCapture;
+    private List<CheckersMan> possibleCaptures;
 
-    public CheckersForcedCapture(CheckersMan source, List<CheckersMan> toCapture) {
+    public CheckersForcedCapture(CheckersMan source, List<CheckersMan> possibleCaptures) {
         this.source = source;
-        this.toCapture = toCapture;
+        this.possibleCaptures = possibleCaptures;
     }
 
     public CheckersMan getSource() {
@@ -20,11 +20,11 @@ public class CheckersForcedCapture {
         this.source = source;
     }
 
-    public List<CheckersMan> getToCapture() {
-        return toCapture;
+    public List<CheckersMan> getPossibleCaptures() {
+        return possibleCaptures;
     }
 
-    public void setToCapture(List<CheckersMan> toCapture) {
-        this.toCapture = toCapture;
+    public void setPossibleCaptures(List<CheckersMan> possibleCaptures) {
+        this.possibleCaptures = possibleCaptures;
     }
 }

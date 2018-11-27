@@ -25,6 +25,11 @@ public class CheckersRESTController extends AbstractRESTController {
         return ok(gamesHolder.getGameById(gameId).move(request));
     }
 
+    @PostMapping("/checkers/moveAI")
+    public ResponseEntity<?> moveAI() throws Exception {
+        return ok(gamesHolder.getGameById(gameId).moveAI());
+    }
+
     @GetMapping("/checkers/new")
     public ResponseEntity<?> newGame() {
         gameId++;

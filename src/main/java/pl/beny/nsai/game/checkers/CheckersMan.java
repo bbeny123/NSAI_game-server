@@ -1,19 +1,24 @@
 package pl.beny.nsai.game.checkers;
 
-import pl.beny.nsai.game.checkers.Checkers.Side;
-
-import static pl.beny.nsai.game.checkers.Checkers.Side.BLACK;
-import static pl.beny.nsai.game.checkers.Checkers.Side.WHITE;
-import static pl.beny.nsai.game.checkers.CheckersMan.Type.MAN;
-import static pl.beny.nsai.game.checkers.CheckersMan.Type.QUEEN;
+import static pl.beny.nsai.game.checkers.CheckersMan.Side.*;
+import static pl.beny.nsai.game.checkers.CheckersMan.Type.*;
 
 public class CheckersMan {
 
     public enum Type {
         MAN,
-        QUEEN;
+        QUEEN,
+        PROHIBITED;
 
         Type() {
+        }
+    }
+
+    public enum Side {
+        WHITE,
+        BLACK;
+
+        Side() {
         }
     }
 
@@ -34,15 +39,23 @@ public class CheckersMan {
         this.type = type;
     }
 
-    public boolean oppositeSide(CheckersMan man) {
-        return this.side != man.side;
-    }
-
     public boolean whiteOrQueen() {
         return this.type == QUEEN || this.side == WHITE;
     }
 
     public boolean blackOrQueen() {
         return this.type == QUEEN || this.side == BLACK;
+    }
+
+    public void move(CheckersMan target) {
+        if (target.y == 0 || target.y == 7) {
+            this.type = QUEEN;
+        }
+        this.x = target.x;
+        this.y = target.y;
+    }
+
+    public CheckersMan copy() {
+        return new CheckersMan(this.x, this.y, this.side, this.type);
     }
 }

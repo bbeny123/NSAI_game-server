@@ -28,10 +28,11 @@ public class GamesException extends Exception {
         CHECKERS_OPPOSITE_MAN(19, "This is no player's man", HttpStatus.BAD_REQUEST),
         CHECKERS_POSITION_TAKEN(20, "This position is already taken", HttpStatus.BAD_REQUEST),
         CHECKERS_POSITION_PROHIBITED(21, "This position is prohibited", HttpStatus.BAD_REQUEST),
-        CHECKERS_CAPTURE_FORCED(22, "This man is forced to capture", HttpStatus.BAD_REQUEST),
-        CHECKERS_COMPUTER_TURN(23, "Computer turn", HttpStatus.BAD_REQUEST),
-        CHECKERS_PLAYER_TURN(24, "Player turn", HttpStatus.BAD_REQUEST),
-        CHECKERS_ERROR(25, "Internal OLO error", HttpStatus.INTERNAL_SERVER_ERROR),
+        CHECKERS_NOT_ALLOWED(22, "This move is not allowed", HttpStatus.BAD_REQUEST),
+        CHECKERS_CAPTURE_FORCED(23, "This man is forced to capture", HttpStatus.BAD_REQUEST),
+        CHECKERS_COMPUTER_TURN(24, "Computer turn", HttpStatus.BAD_REQUEST),
+        CHECKERS_PLAYER_TURN(25, "Player turn", HttpStatus.BAD_REQUEST),
+        CHECKERS_ERROR(26, "Internal OLO error", HttpStatus.INTERNAL_SERVER_ERROR),
 
         AI_ERROR(99, "Sorry, our OLO AI is dumb as ...", HttpStatus.INTERNAL_SERVER_ERROR);
 
