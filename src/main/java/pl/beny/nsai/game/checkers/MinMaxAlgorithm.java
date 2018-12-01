@@ -26,9 +26,11 @@ public class MinMaxAlgorithm {
     public CheckersResult makeMove(CheckersBoard board) {
         CheckersPossibleMoves m = minMaxStart(board, depth, side, true);
 
-        //CheckersResult decision = board.move(m, side);
-//        if (decision == Board.Decision.ADDITIONAL_MOVE)
-//            skippingPoint = m.getEnd();
+        try {
+            CheckersResult decision = board.move(m.getSource().x, m.getSource().y, m.getPossibleTargets().get(0).x, m.getPossibleTargets().get(0).y, side);
+        } catch (GamesException e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
