@@ -27,7 +27,7 @@ public class CheckersBoard {
         this.board = board;
         for (int i = 0; i < 8; i++) {
             for (int j = i % 2; j < 8; j += 2) {
-                if (board(i,j) != null) {
+                if (board(i, j) != null) {
                     this.board[i][j] = board[i][j].copy();
                 }
             }
@@ -105,7 +105,7 @@ public class CheckersBoard {
         move(source, target);
 
         List<CheckersMan> forceToCapture = getPossibleCaptures(board(target));
-        if(!forceToCapture.isEmpty()) {
+        if (!forceToCapture.isEmpty()) {
             result.setForceToCapture(new CheckersForcedCapture(board(target), forceToCapture));
         }
     }
@@ -137,7 +137,7 @@ public class CheckersBoard {
         List<CheckersPossibleMoves> moves = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int j = i % 2; j < 8; j += 2) {
-                if (board(i,j) != null && board(i,j).side == side) {
+                if (board(i, j) != null && board(i, j).side == side) {
                     List<CheckersMan> men = getPossibleMoves(board(i, j));
                     if (!men.isEmpty()) {
                         moves.add(new CheckersPossibleMoves(board(i, j), men));
@@ -234,8 +234,8 @@ public class CheckersBoard {
         List<CheckersMan> men = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int j = i % 2; j < 8; j += 2) {
-                if (board(i,j) != null) {
-                    men.add(board(i,j));
+                if (board(i, j) != null) {
+                    men.add(board(i, j));
                 }
             }
         }
@@ -249,6 +249,24 @@ public class CheckersBoard {
     public List<CheckersMan> getCheckers(Side side, Type type) {
         return getCheckers(side).stream().filter(checker -> checker.side == side && checker.type == type).collect(Collectors.toList());
     }
+
+
+    public double getNumWhiteQueenPieces() {
+        return getCheckers(Side.WHITE, Type.QUEEN).size();
+    }
+
+    public double getNumBlackQueenPieces() {
+        return getCheckers(Side.BLACK, Type.QUEEN).size();
+    }
+
+    public double getNumWhiteNormalPieces() {
+        return getCheckers(Side.WHITE, Type.MAN).size();
+    }
+
+    public double getNumBlackNormalPieces() {
+        return getCheckers(Side.BLACK, Type.MAN).size();
+    }
+
 
     public CheckersBoard copy() {
         return new CheckersBoard(this.board);
