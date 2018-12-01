@@ -7,7 +7,7 @@ import static pl.beny.nsai.game.checkers.CheckersMan.Side.BLACK;
 
 public class CheckersOloAI {
 
-    public static CheckersResult moveAI(CheckersBoard board, CheckersForcedCapture forcedCapture) {
+    public static CheckersResult moveAI(CheckersBoard board, CheckersPossibleMoves forcedCapture) {
         while (true) {
             try {
                 CheckersPossibleMoves move = getRandomMove(board, forcedCapture);
@@ -26,15 +26,15 @@ public class CheckersOloAI {
         }
     }
 
-    private static CheckersPossibleMoves getRandomMove(CheckersBoard board, CheckersForcedCapture forcedCapture) {
+    private static CheckersPossibleMoves getRandomMove(CheckersBoard board, CheckersPossibleMoves forcedCapture) {
         if (forcedCapture != null) {
-            return new CheckersPossibleMoves(forcedCapture.getSource(), forcedCapture.getPossibleCaptures());
+            return new CheckersPossibleMoves(forcedCapture.getSource(), forcedCapture.getPossibleTargets());
         }
 
         List<CheckersPossibleMoves> moves = board.getPossibleMoves(BLACK);
         List<CheckersPossibleMoves> captures = board.getPossibleCaptures(BLACK);
 
-        if (!captures.isEmpty() && (moves.isEmpty() || new Random().nextInt(2) == 0)) {
+        if (!captures.isEmpty()) {
             return captures.get(new Random().nextInt(captures.size()));
         } else if (!moves.isEmpty()) {
             return moves.get(new Random().nextInt(moves.size()));

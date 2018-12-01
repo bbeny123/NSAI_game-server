@@ -20,7 +20,7 @@ public class Checkers {
     }
 
     private CheckersBoard board = new CheckersBoard();
-    private CheckersForcedCapture forcedCapture;
+    private CheckersPossibleMoves forcedCapture;
     private int status = Status.WHITE_TURN;
 
     public CheckersResult move(CheckersRequest request) throws GamesException {

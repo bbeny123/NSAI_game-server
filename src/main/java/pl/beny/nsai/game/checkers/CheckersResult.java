@@ -5,7 +5,7 @@ import static pl.beny.nsai.game.checkers.Checkers.Status.WHITE_TURN;
 public class CheckersResult {
 
     private CheckersMan playerCaptured;
-    private CheckersForcedCapture forceToCapture;
+    private CheckersPossibleMoves forceToCapture;
     private CheckersMan computerSource;
     private CheckersMan computerTarget;
     private CheckersMan computerCaptured;
@@ -19,11 +19,11 @@ public class CheckersResult {
         this.playerCaptured = playerCaptured;
     }
 
-    public CheckersForcedCapture getForceToCapture() {
+    public CheckersPossibleMoves getForceToCapture() {
         return forceToCapture;
     }
 
-    public void setForceToCapture(CheckersForcedCapture forceToCapture) {
+    public void setForceToCapture(CheckersPossibleMoves forceToCapture) {
         this.forceToCapture = forceToCapture;
     }
 

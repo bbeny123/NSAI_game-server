@@ -106,7 +106,7 @@ public class CheckersBoard {
 
         List<CheckersMan> forceToCapture = getPossibleCaptures(board(target));
         if (!forceToCapture.isEmpty()) {
-            result.setForceToCapture(new CheckersForcedCapture(board(target), forceToCapture));
+            result.setForceToCapture(new CheckersPossibleMoves(board(target), forceToCapture));
         }
     }
 
@@ -224,8 +224,8 @@ public class CheckersBoard {
         return !getPossibleMoves(side).isEmpty() || !getPossibleCaptures(side).isEmpty();
     }
 
-    public void checkForcedCapture(int x1, int y1, int x2, int y2, CheckersForcedCapture forcedCapture) throws GamesException {
-        if (forcedCapture.getSource().x != x1 || forcedCapture.getSource().y != y1 || forcedCapture.getPossibleCaptures().stream().noneMatch(capture -> capture.x == x2 && capture.y == y2)) {
+    public void checkForcedCapture(int x1, int y1, int x2, int y2, CheckersPossibleMoves forcedCapture) throws GamesException {
+        if (forcedCapture.getSource().x != x1 || forcedCapture.getSource().y != y1 || forcedCapture.getPossibleTargets().stream().noneMatch(capture -> capture.x == x2 && capture.y == y2)) {
             throw new GamesException(CHECKERS_CAPTURE_FORCED);
         }
     }
@@ -250,7 +250,6 @@ public class CheckersBoard {
         return getCheckers(side).stream().filter(checker -> checker.side == side && checker.type == type).collect(Collectors.toList());
     }
 
-
     public double getNumWhiteQueenPieces() {
         return getCheckers(Side.WHITE, Type.QUEEN).size();
     }
@@ -266,7 +265,6 @@ public class CheckersBoard {
     public double getNumBlackNormalPieces() {
         return getCheckers(Side.BLACK, Type.MAN).size();
     }
-
 
     public CheckersBoard copy() {
         return new CheckersBoard(this.board);
