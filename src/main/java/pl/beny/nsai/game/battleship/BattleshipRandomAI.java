@@ -17,7 +17,7 @@ public class BattleshipRandomAI {
                         int xOrY = new Random().nextInt(2);
                         int x = new Random().nextInt(xOrY == 0 ? BattleshipBoard.BOARD_SIZE : BattleshipBoard.BOARD_SIZE + 1 - i);
                         int y = new Random().nextInt(xOrY == 0 ? BattleshipBoard.BOARD_SIZE + 1 - i : BattleshipBoard.BOARD_SIZE);
-                        board.placeShip(x, y, xOrY == 0 ? x : x + i, xOrY == 0 ? y + 1 : y);
+                        board.placeShip(x, y, xOrY == 0 ? x : x + i - 1, xOrY == 0 ? y + i - 1: y);
                         ships.placeShip(i);
                         return;
                     } catch (Exception e) { }
