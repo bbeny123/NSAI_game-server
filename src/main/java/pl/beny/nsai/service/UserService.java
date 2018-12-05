@@ -74,7 +74,7 @@ public class UserService extends BaseService<User> {
         checkAdmin(ctx);
         User user = repository.findOneById(userId).orElseThrow(() -> new GamesException(GamesException.GamesErrors.USER_NOT_EXISTS));
         if (user.getId().equals(ctx.getUser().getId())) {
-            throw new GamesException(GamesException.GamesErrors.NOT_AUTHORIZED);
+            throw new GamesException(GamesException.GamesErrors.UNAUTHORIZED);
         }
         if (User.Action.GRANT.equalsIgnoreCase(action)) {
             grantRole(user, role);

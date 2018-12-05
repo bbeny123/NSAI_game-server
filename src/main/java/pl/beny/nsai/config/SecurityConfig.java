@@ -10,18 +10,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import pl.beny.nsai.model.Role;
 import pl.beny.nsai.service.UserContextService;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     private UserContextService userService;
+    private SecuredRequestInterceptor securedRequestInterceptor;
 
     @Autowired
-    public SecurityConfig(UserContextService userService) {
+    public SecurityConfig(UserContextService userService, SecuredRequestInterceptor securedRequestInterceptor) {
         this.userService = userService;
+        this.securedRequestInterceptor = securedRequestInterceptor;
     }
 
     @Override
@@ -60,5 +63,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
+//    @Override
+//    public void addInterceptors(@NonNull InterceptorRegistry registry) {
+//        registry.addInterceptor(securedRequestInterceptor).addPathPatterns("/rest/**").excludePathPatterns("/rest/register/**");
+//    }
 
 }

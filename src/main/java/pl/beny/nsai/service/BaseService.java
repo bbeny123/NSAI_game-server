@@ -59,7 +59,7 @@ public abstract class BaseService<T> {
     }
 
     void checkAdmin(UserContext ctx) throws GamesException {
-        if (!ctx.isAdmin()) throw new GamesException(GamesException.GamesErrors.NOT_AUTHORIZED);
+        if (!ctx.isAdmin()) throw new GamesException(GamesException.GamesErrors.UNAUTHORIZED);
     }
 
 }

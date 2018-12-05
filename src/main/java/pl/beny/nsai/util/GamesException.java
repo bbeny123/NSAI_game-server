@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 public class GamesException extends Exception {
 
     public enum GamesErrors {
-        NOT_AUTHORIZED(1, "Unauthorized", HttpStatus.UNAUTHORIZED),
+        UNAUTHORIZED(1, "Unauthorized", HttpStatus.UNAUTHORIZED),
         CAPTCHA_ERROR(2, "Captcha Error", HttpStatus.FORBIDDEN),
         USER_EXISTS(3, "The e-mail address is already in use", HttpStatus.CONFLICT),
         ITEM_NOT_EXISTS(4, "The item does not exist in database", HttpStatus.NOT_FOUND),
