@@ -12,13 +12,6 @@ import static pl.beny.nsai.util.GamesException.GamesErrors.BATTLESHIP_WRONG_SIZE
 @Component
 public class BattleshipShips {
 
-    public interface Ships {
-        int SIZE_1 = 1;
-        int SIZE_2 = 2;
-        int SIZE_3 = 3;
-        int SIZE_4 = 4;
-    }
-
     private AtomicInteger size1 = new AtomicInteger(4);
     private AtomicInteger size2 = new AtomicInteger(3);
     private AtomicInteger size3 = new AtomicInteger(2);
@@ -48,11 +41,23 @@ public class BattleshipShips {
 
     private AtomicInteger ship(int size) throws GamesException {
         switch (size) {
-            case SIZE_1: return size1;
-            case SIZE_2: return size2;
-            case SIZE_3: return size3;
-            case SIZE_4: return size4;
-            default: throw new GamesException(BATTLESHIP_WRONG_SIZE);
+            case SIZE_1:
+                return size1;
+            case SIZE_2:
+                return size2;
+            case SIZE_3:
+                return size3;
+            case SIZE_4:
+                return size4;
+            default:
+                throw new GamesException(BATTLESHIP_WRONG_SIZE);
         }
+    }
+
+    public interface Ships {
+        int SIZE_1 = 1;
+        int SIZE_2 = 2;
+        int SIZE_3 = 3;
+        int SIZE_4 = 4;
     }
 }
