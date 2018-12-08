@@ -17,52 +17,52 @@ import javax.validation.Valid;
 @Controller
 public class RegistrationController extends BaseController {
 
-	private final UserService userService;
-	private final TokenService tokenService;
+    private final UserService userService;
+    private final TokenService tokenService;
 
-	@Autowired
-	public RegistrationController(UserService userService, TokenService tokenService, MessageSource messageSource) {
-		super("registration", "/register", messageSource);
-		this.userService = userService;
-		this.tokenService = tokenService;
-	}
+    @Autowired
+    public RegistrationController(UserService userService, TokenService tokenService, MessageSource messageSource) {
+        super("registration", "/register", messageSource);
+        this.userService = userService;
+        this.tokenService = tokenService;
+    }
 
-	@GetMapping("/register")
-	public String register() {
-		return viewOrForwardToHome(viewName);
-	}
+    @GetMapping("/register")
+    public String register() {
+        return viewOrForwardToHome(viewName);
+    }
 
-	@PostMapping("/register")
-	public String register(Model model, @Valid UserRequest userRequest, @RequestParam("g-recaptcha-response") String captcha) throws RuntimeException {
-		if (isAuthenticated()) {
-			return redirect;
-		}
-		CaptchaUtil.verifyCaptcha(captcha);
-		userService.create(userRequest.getUser());
-		return responseInfo("login", model, "info.registered");
-	}
+    @PostMapping("/register")
+    public String register(Model model, @Valid UserRequest userRequest, @RequestParam("g-recaptcha-response") String captcha) throws RuntimeException {
+        if (isAuthenticated()) {
+            return redirect;
+        }
+        CaptchaUtil.verifyCaptcha(captcha);
+        userService.create(userRequest.getUser());
+        return responseInfo("login", model, "info.registered");
+    }
 
-	@GetMapping("/register/activate")
-	public String activate(Model model, @RequestParam("token") String token) throws RuntimeException {
-		if (isAuthenticated()) {
-			return redirect;
-		}
-		userService.activate(tokenService.findByToken(token).getUser());
-		return responseInfo("login", model, "info.activated");
-	}
+    @GetMapping("/register/activate")
+    public String activate(Model model, @RequestParam("token") String token) throws RuntimeException {
+        if (isAuthenticated()) {
+            return redirect;
+        }
+        userService.activate(tokenService.findByToken(token).getUser());
+        return responseInfo("login", model, "info.activated");
+    }
 
-	@GetMapping("/register/resend")
-	public String resend() {
-		return viewOrForwardToHome("token");
-	}
+    @GetMapping("/register/resend")
+    public String resend() {
+        return viewOrForwardToHome("token");
+    }
 
-	@PostMapping("/register/resend")
-	public String resendToken(Model model, String email) throws RuntimeException {
-		if (isAuthenticated()) {
-			return redirect;
-		}
-		userService.resendToken(userService.findByEmail(email));
-		return responseInfo("login", model, "info.resend");
-	}
+    @PostMapping("/register/resend")
+    public String resendToken(Model model, String email) throws RuntimeException {
+        if (isAuthenticated()) {
+            return redirect;
+        }
+        userService.resendToken(userService.findByEmail(email));
+        return responseInfo("login", model, "info.resend");
+    }
 
 }

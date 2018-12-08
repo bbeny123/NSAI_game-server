@@ -23,7 +23,6 @@ public class BattleshipShips {
     private AtomicInteger size2 = new AtomicInteger(3);
     private AtomicInteger size3 = new AtomicInteger(2);
     private AtomicInteger size4 = new AtomicInteger(1);
-
     private int onBoard;
 
     public boolean shipAvailable(int size) throws GamesException {
@@ -39,7 +38,7 @@ public class BattleshipShips {
         return --onBoard;
     }
 
-    public boolean allShipsPlaced(){
+    public boolean allShipsPlaced() {
         return size1.get() <= 0 && size2.get() <= 0 && size3.get() <= 0 && size4.get() <= 0;
     }
 

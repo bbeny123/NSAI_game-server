@@ -15,25 +15,25 @@ import java.util.stream.Collectors;
 @Controller
 public class UserController extends BaseController {
 
-	private final UserService userService;
+    private final UserService userService;
 
-	@Autowired
-	public UserController(UserService userService, MessageSource messageSource) {
-		super("users", "/users", messageSource, true);
-		this.userService = userService;
-	}
+    @Autowired
+    public UserController(UserService userService, MessageSource messageSource) {
+        super("users", "/users", messageSource, true);
+        this.userService = userService;
+    }
 
-	@GetMapping("/users")
-	public String users(Model model) throws RuntimeException {
-		model.addAttribute("userId", getUserContext().getUserId());
-		model.addAttribute("users", userService.findAllAdmin(getUserContext()).stream().map(UserResponse::new).collect(Collectors.toList()));
-		return viewName;
-	}
+    @GetMapping("/users")
+    public String users(Model model) throws RuntimeException {
+        model.addAttribute("userId", getUserContext().getUserId());
+        model.addAttribute("users", userService.findAllAdmin(getUserContext()).stream().map(UserResponse::new).collect(Collectors.toList()));
+        return viewName;
+    }
 
-	@PostMapping("/users/{userId}/activate")
-	public String activate(@PathVariable("userId") Long userId) throws RuntimeException {
-		userService.activate(getUserContext(), userId);
-		return redirectToUrl();
-	}
+    @PostMapping("/users/{userId}/activate")
+    public String activate(@PathVariable("userId") Long userId) throws RuntimeException {
+        userService.activate(getUserContext(), userId);
+        return redirectToUrl();
+    }
 
 }

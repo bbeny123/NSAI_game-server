@@ -18,13 +18,15 @@ public class Battleship {
 
     public BattleshipPlacedResponse placeShip(BattleshipPlaceRequest placeRequest) throws GamesException {
         if (STATUS != BattleshipStatus.PREPARING) throw new GamesException(BATTLESHIP_NOT_PREPARING);
-        if (!player.getShips().shipAvailable(placeRequest.size())) throw new GamesException(BATTLESHIP_SIZE_NOT_AVAILABLE);
+        if (!player.getShips().shipAvailable(placeRequest.size()))
+            throw new GamesException(BATTLESHIP_SIZE_NOT_AVAILABLE);
 
         player.getBoard().placeShip(placeRequest.getX1(), placeRequest.getY1(), placeRequest.getX2(), placeRequest.getY2());
         player.getShips().placeShip(placeRequest.size());
         BattleshipRandomAI.placeShip(computer.getShips(), computer.getBoard());
 
-        if (player.getShips().allShipsPlaced() && computer.getShips().allShipsPlaced()) STATUS = BattleshipStatus.BATTLE;
+        if (player.getShips().allShipsPlaced() && computer.getShips().allShipsPlaced())
+            STATUS = BattleshipStatus.BATTLE;
 
         return new BattleshipPlacedResponse(STATUS);
     }
