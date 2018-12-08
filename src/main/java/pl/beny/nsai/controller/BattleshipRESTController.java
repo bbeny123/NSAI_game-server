@@ -3,8 +3,8 @@ package pl.beny.nsai.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.beny.nsai.dto.BattleshipFireRequest;
-import pl.beny.nsai.dto.BattleshipPlaceRequest;
+import pl.beny.nsai.dto.battleship.BattleshipFireRequest;
+import pl.beny.nsai.dto.battleship.BattleshipPlaceRequest;
 import pl.beny.nsai.game.GamesHolder;
 
 import javax.validation.Valid;

@@ -1,4 +1,4 @@
-package pl.beny.nsai.dto;
+package pl.beny.nsai.dto.battleship;
 
 public class BattleshipFireResponse extends AbstractBattleshipResponse {
 

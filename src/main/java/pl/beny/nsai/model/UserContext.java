@@ -1,35 +1,48 @@
 package pl.beny.nsai.model;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class UserContext implements UserDetails {
+public class UserContext implements UserDetails, Authentication {
 
+    private final List<GrantedAuthority> authorities;
     private User user;
-    private List<Role.Roles> roles;
-    private List<GrantedAuthority> authorities;
 
     public UserContext() {
-        roles = new ArrayList<>();
+        this.authorities = new ArrayList<>();
     }
 
     public UserContext(User user) {
         this.user = user;
-        this.roles = user.getRoles().stream().map(Role::getRole).collect(Collectors.toList());
-        this.authorities = AuthorityUtils.createAuthorityList(roles.stream().map(Role.Roles::getRole).toArray(String[]::new));
+        this.authorities = AuthorityUtils.createAuthorityList(user.getType().name());
     }
 
-    public User getUser() {
-        return user;
+    public UserContext(User user, String password) {
+        this(user);
+        this.user.setPassword(password);
+    }
+
+    public Long getUserId() {
+        return user.getId();
     }
 
     public boolean isAdmin() {
-        return roles.contains(Role.Roles.ADMIN);
+        return User.Type.A == user.getType();
+    }
+
+    @Override
+    public User getPrincipal() {
+        return user;
+    }
+
+    @Override
+    public User getDetails() {
+        return this.getPrincipal();
     }
 
     @Override
@@ -43,8 +56,18 @@ public class UserContext implements UserDetails {
     }
 
     @Override
+    public String getCredentials() {
+        return this.getPassword();
+    }
+
+    @Override
     public String getUsername() {
         return user.getEmail();
+    }
+
+    @Override
+    public String getName() {
+        return user.getName();
     }
 
     @Override
@@ -64,6 +87,17 @@ public class UserContext implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.isActive() && !user.getRoles().isEmpty();
+        return user.isActive();
     }
+
+    @Override
+    public boolean isAuthenticated() {
+        return user != null && isEnabled();
+    }
+
+    @Override
+    public void setAuthenticated(boolean authenticated) {
+        user.setActive(authenticated);
+    }
+
 }

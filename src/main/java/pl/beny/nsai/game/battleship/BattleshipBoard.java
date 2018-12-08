@@ -2,9 +2,7 @@ package pl.beny.nsai.game.battleship;
 
 import pl.beny.nsai.util.GamesException;
 
-import static pl.beny.nsai.util.GamesException.GamesErrors.BATTLESHIP_OFF_THE_BOARD;
-import static pl.beny.nsai.util.GamesException.GamesErrors.BATTLESHIP_PLACE_FIRED;
-import static pl.beny.nsai.util.GamesException.GamesErrors.BATTLESHIP_WRONG_PLACEMENT;
+import static pl.beny.nsai.util.GamesException.GamesErrors.*;
 
 public class BattleshipBoard {
 

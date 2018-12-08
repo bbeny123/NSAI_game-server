@@ -1,15 +1,13 @@
 package pl.beny.nsai.game.battleship;
 
-import pl.beny.nsai.dto.AbstractBattleshipResponse.BattleshipStatus;
-import pl.beny.nsai.dto.BattleshipFireRequest;
-import pl.beny.nsai.dto.BattleshipFireResponse;
-import pl.beny.nsai.dto.BattleshipPlaceRequest;
-import pl.beny.nsai.dto.BattleshipPlacedResponse;
+import pl.beny.nsai.dto.battleship.AbstractBattleshipResponse.BattleshipStatus;
+import pl.beny.nsai.dto.battleship.BattleshipFireRequest;
+import pl.beny.nsai.dto.battleship.BattleshipFireResponse;
+import pl.beny.nsai.dto.battleship.BattleshipPlaceRequest;
+import pl.beny.nsai.dto.battleship.BattleshipPlacedResponse;
 import pl.beny.nsai.util.GamesException;
 
-import static pl.beny.nsai.util.GamesException.GamesErrors.BATTLESHIP_NOT_BATTLE;
-import static pl.beny.nsai.util.GamesException.GamesErrors.BATTLESHIP_NOT_PREPARING;
-import static pl.beny.nsai.util.GamesException.GamesErrors.BATTLESHIP_SIZE_NOT_AVAILABLE;
+import static pl.beny.nsai.util.GamesException.GamesErrors.*;
 
 public class Battleship {
 

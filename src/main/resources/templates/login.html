@@ -7,23 +7,23 @@
 <div class="container">
     <!--/*/ <th:block th:include="fragments/menu :: menu"></th:block> /*/-->
     <script>activateLogin();</script>
-    <form th:action="@{/login}" method="post" class="mt-2 w-50">
+    <form class="mt-2 w-50" method="post" th:action="@{/login}">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text">@</span>
             </div>
-            <input type="email" class="form-control" name="email" th:placeholder="#{login.email}" required>
+            <input class="form-control" name="email" required th:placeholder="#{login.email}" type="email">
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" th:text="#{login.password}"></span>
             </div>
-            <input type="password" class="form-control" name="password" th:placeholder="#{login.password}" required>
+            <input class="form-control" name="password" required th:placeholder="#{login.password}" type="password">
         </div>
         <div class="btn-toolbar">
             <div class="btn-group w-100">
-                <button class="btn btn-primary w-50" type="submit" autofocus th:text="#{login.sign_in}"></button>
-                <a class="btn btn-secondary w-50" th:text="#{login.sign_up}" th:href="@{/register}"></a>
+                <button autofocus class="btn btn-primary w-50" th:text="#{login.sign_in}" type="submit"></button>
+                <a class="btn btn-secondary w-50" th:href="@{/register}" th:text="#{login.sign_up}"></a>
             </div>
         </div>
     </form>

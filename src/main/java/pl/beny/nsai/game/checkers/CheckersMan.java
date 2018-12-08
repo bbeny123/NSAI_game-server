@@ -1,7 +1,9 @@
 package pl.beny.nsai.game.checkers;
 
-import static pl.beny.nsai.game.checkers.CheckersMan.Side.*;
-import static pl.beny.nsai.game.checkers.CheckersMan.Type.*;
+import static pl.beny.nsai.game.checkers.CheckersMan.Side.BLACK;
+import static pl.beny.nsai.game.checkers.CheckersMan.Side.WHITE;
+import static pl.beny.nsai.game.checkers.CheckersMan.Type.MAN;
+import static pl.beny.nsai.game.checkers.CheckersMan.Type.QUEEN;
 
 public class CheckersMan {
 

@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns:th="http://www.thymeleaf.org">
 <body>
 <div class="container" th:fragment="menu">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <a class="navbar-brand" th:href="@{/}" th:text="#{menu.home}"></a>
         <div class="navbar-nav">
-            <a class="nav-item nav-link" id="users" th:href="@{/users}" sec:authorize="hasAuthority('ADMIN')" th:text="#{menu.users}"></a>
+            <a class="nav-item nav-link" id="users" sec:authorize="hasAuthority('A')" th:href="@{/users}" th:text="#{menu.users}"></a>
         </div>
         <div class="navbar-nav" sec:authorize="!isAuthenticated()">
             <a class="nav-item nav-link" id="login" th:href="@{/login}" th:text="#{menu.login}"></a>
             <a class="nav-item nav-link" id="register" th:href="@{/register}" th:text="#{menu.register}"></a>
         </div>
-        <form name="logout" class="navbar-bar ml-2" th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" >
-            <button class="btn btn-outline-danger" type="submit" th:text="#{menu.logout}"></button>
+        <form class="navbar-bar ml-2" method="post" name="logout" sec:authorize="isAuthenticated()" th:action="@{/logout}">
+            <button class="btn btn-outline-danger" th:text="#{menu.logout}" type="submit"></button>
         </form>
     </nav>
     <!--/*@thymesVar id="info" type="java.lang.String"*/-->
-    <label th:if="${info}" th:utext="${#strings.replace(#strings.escapeXml(info),'&#10;','&lt;br&gt;')}" class="text-md-left text-danger font-weight-bold mt-2"></label>
+    <label class="text-md-left text-danger font-weight-bold mt-2" th:if="${info}" th:utext="${#strings.replace(#strings.escapeXml(info),'&#10;','&lt;br&gt;')}"></label>
 </div>
 </body>
 </html>

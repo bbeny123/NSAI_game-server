@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Controller
 public class UserController extends BaseController {
 
-	private UserService userService;
+	private final UserService userService;
 
 	@Autowired
 	public UserController(UserService userService, MessageSource messageSource) {
@@ -24,21 +24,15 @@ public class UserController extends BaseController {
 	}
 
 	@GetMapping("/users")
-	public String users(Model model) throws Exception {
-		model.addAttribute("userId", getUserContext().getUser().getId());
+	public String users(Model model) throws RuntimeException {
+		model.addAttribute("userId", getUserContext().getUserId());
 		model.addAttribute("users", userService.findAllAdmin(getUserContext()).stream().map(UserResponse::new).collect(Collectors.toList()));
 		return viewName;
 	}
 
 	@PostMapping("/users/{userId}/activate")
-	public String activate(@PathVariable("userId") Long userId) throws Exception {
+	public String activate(@PathVariable("userId") Long userId) throws RuntimeException {
 		userService.activate(getUserContext(), userId);
-		return redirectToUrl();
-	}
-
-	@PostMapping("/users/{userId}/{action}/{role}")
-	public String changeRole(@PathVariable("userId") Long userId, @PathVariable("action") String action, @PathVariable("role") String role) throws Exception {
-		userService.changeRole(getUserContext(), userId, action, role);
 		return redirectToUrl();
 	}
 

@@ -2,9 +2,10 @@ package pl.beny.nsai.util;
 
 import org.springframework.http.HttpStatus;
 
-public class GamesException extends Exception {
+public class GamesException extends RuntimeException {
 
     public enum GamesErrors {
+        FORBIDDEN(0, "Forbidden", HttpStatus.FORBIDDEN),
         UNAUTHORIZED(1, "Unauthorized", HttpStatus.UNAUTHORIZED),
         CAPTCHA_ERROR(2, "Captcha Error", HttpStatus.FORBIDDEN),
         USER_EXISTS(3, "The e-mail address is already in use", HttpStatus.CONFLICT),
@@ -12,7 +13,6 @@ public class GamesException extends Exception {
         USER_NOT_EXISTS(5, "The e-mail does not exist in database", HttpStatus.NOT_FOUND),
         EMAIL_NOT_EXISTS(6, "The e-mail does not exist in database", HttpStatus.NOT_FOUND),
         TOKEN_NOT_EXISTS(7, "The token does not exist in database", HttpStatus.NOT_FOUND),
-        ROLE_NOT_EXISTS(8, "Role does not exist!", HttpStatus.NOT_FOUND),
         USER_ALREADY_ACTIVE(9, "User connected with this email is already active", HttpStatus.CONFLICT),
 
         BATTLESHIP_WRONG_SIZE(10, "The ship of that size does not exist", HttpStatus.BAD_REQUEST),
@@ -34,7 +34,9 @@ public class GamesException extends Exception {
         CHECKERS_PLAYER_TURN(25, "Player turn", HttpStatus.BAD_REQUEST),
         CHECKERS_ERROR(26, "Internal OLO error", HttpStatus.INTERNAL_SERVER_ERROR),
 
-        AI_ERROR(99, "Sorry, our OLO AI is dumb as ...", HttpStatus.INTERNAL_SERVER_ERROR);
+        AI_ERROR(99, "Sorry, our OLO AI is dumb as ...", HttpStatus.INTERNAL_SERVER_ERROR),
+
+        INTERNAL_SERVER_ERROR(500, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
 
         private int code;
         private String message;

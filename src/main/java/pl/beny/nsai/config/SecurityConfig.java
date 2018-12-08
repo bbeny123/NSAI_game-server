@@ -8,23 +8,18 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import pl.beny.nsai.model.Role;
-import pl.beny.nsai.service.UserContextService;
+import pl.beny.nsai.model.User;
+import pl.beny.nsai.service.UserService;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserContextService userService;
-    private SecuredRequestInterceptor securedRequestInterceptor;
+    private final UserService userService;
 
     @Autowired
-    public SecurityConfig(UserContextService userService, SecuredRequestInterceptor securedRequestInterceptor) {
+    public SecurityConfig(UserService userService) {
         this.userService = userService;
-        this.securedRequestInterceptor = securedRequestInterceptor;
     }
 
     @Override
@@ -37,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/static/**", "/", "/login/**", "/register/**", "/rest/**").permitAll()
-                .antMatchers("/users/**").hasAuthority(Role.Roles.ADMIN.getRole())
+                .antMatchers("/users/**").hasAuthority(User.Type.A.name())
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -54,19 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
-//    @Override
-//    public void addInterceptors(@NonNull InterceptorRegistry registry) {
-//        registry.addInterceptor(securedRequestInterceptor).addPathPatterns("/rest/**").excludePathPatterns("/rest/register/**");
-//    }
 
 }

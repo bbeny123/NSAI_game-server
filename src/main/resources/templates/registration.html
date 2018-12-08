@@ -8,17 +8,14 @@
 <div class="container">
     <!--/*/ <th:block th:include="fragments/menu :: menu"></th:block> /*/-->
     <script>activateRegister();</script>
-    <form th:action="@{/register}" method="post" class="mt-2 w-50">
-        <input class="mb-3 form-control" type="email" th:name="email" th:placeholder="#{registration.email}" pattern=".{3,60}" required>
-        <input class="mb-3 form-control" type="password" th:name="password" th:placeholder="#{registration.password}" pattern=".{4,}" onchange="validatePassword()" th:id="password" required>
-        <input class="mb-3 form-control" type="password" th:name="confirm_password" th:placeholder="#{registration.password.confirm}" pattern=".{4,}" onkeyup="validatePassword()" th:id="confirm_password" required>
-        <input class="mb-3 form-control" type="text" th:name="firstName" th:placeholder="#{registration.firstName}" pattern="[A-Za-z]{1,60}" required>
-        <input class="mb-3 form-control" type="text" th:name="lastName" th:placeholder="#{registration.lastName}" pattern="[A-Za-z]{1,60}" required>
-        <input class="mb-3 form-control" type="text" th:name="city" th:placeholder="#{registration.city}" pattern="[A-Za-z]{1,60}" required>
-        <input class="mb-3 form-control" type="text" th:name="phone" th:placeholder="#{registration.phone}" pattern="[0-9]{0,30}" >
+    <form class="mt-2 w-50" method="post" th:action="@{/register}">
+        <input class="mb-3 form-control" pattern=".{3,60}" required th:name="email" th:placeholder="#{registration.email}" type="email">
+        <input class="mb-3 form-control" onchange="validatePassword()" pattern=".{4,}" required th:id="password" th:name="password" th:placeholder="#{registration.password}" type="password">
+        <input class="mb-3 form-control" onkeyup="validatePassword()" pattern=".{4,}" required th:id="confirm_password" th:name="confirm_password" th:placeholder="#{registration.password.confirm}" type="password">
+        <input class="mb-3 form-control" pattern="[A-Za-z ]{1,120}" required th:name="name" th:placeholder="#{registration.name}" type="text">
         <div class="mb-3 align-self-center g-recaptcha" th:attr="data-sitekey=${@captchaUtil.getSite()}"></div>
-        <button class="btn btn-primary mb-2 w-100" type="submit" th:text="#{registration.sign_up}"></button>
-        <a th:text="#{registration.resend.link}" th:href="@{/register/resend}"></a>
+        <button class="btn btn-primary mb-2 w-100" th:text="#{registration.sign_up}" type="submit"></button>
+        <a th:href="@{/register/resend}" th:text="#{registration.resend.link}"></a>
     </form>
 </div>
 </body>

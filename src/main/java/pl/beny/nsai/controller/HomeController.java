@@ -14,7 +14,7 @@ public class HomeController {
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public String redirect()   {
+    public String redirect() {
         return "redirect:/";
     }
 

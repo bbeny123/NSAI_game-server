@@ -8,6 +8,7 @@ spring:
     properties.hibernate.temp.use_jdbc_metadata_defaults: false
     hibernate.ddl-auto: none
     show-sql: true
+    open-in-view: true
   mail:
     host: smtp.gmail.com
     port: 587
@@ -28,7 +29,9 @@ oauth:
     secret: nsai
   token.validity: 86400
 captcha:
-  enable: false
+  enable: true
   url: https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}
   secret:
   site:
+registration:
+  url: http://localhost:8080/register/activate?token=

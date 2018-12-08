@@ -1,30 +1,19 @@
 package pl.beny.nsai.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
 @SequenceGenerator(sequenceName = "SEQ_USR", name = "SEQ_USR")
-@NamedEntityGraph(name = User.EntityGraphs.WITH_ROLES, attributeNodes = @NamedAttributeNode("roles"))
 public class User {
 
-    public interface EntityGraphs {
-        String WITH_ROLES = "User.WITH_ROLES";
-    }
-
-    public interface Action {
-        String GRANT = "grant";
-        String REVOKE = "revoke";
+    public enum Type {
+        A,  //admin
+        U   //standard user
     }
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Token token;
-
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "URL_USR_ID"), inverseJoinColumns = @JoinColumn(name = "URL_ROL_ID"))
-    private Set<Role> roles;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_USR")
@@ -37,17 +26,12 @@ public class User {
     @Column(name = "USR_PASSWORD", nullable = false)
     private String password;
 
-    @Column(name = "USR_FIRST_NAME", length = 60)
-    private String firstName;
+    @Column(name = "USR_NAME", length = 120)
+    private String name;
 
-    @Column(name = "USR_LAST_NAME", length = 60)
-    private String lastName;
-
-    @Column(name = "USR_CITY", length = 60)
-    private String city;
-
-    @Column(name = "USR_PHONE", length = 30)
-    private String phone;
+    @Column(name = "USR_TYPE", length = 1, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Type type = Type.U;
 
     @Column(name = "USR_ACTIVE")
     private boolean active;
@@ -76,44 +60,20 @@ public class User {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public Type getType() {
+        return type;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFullName() {
-        return firstName + " " + lastName;
-    }
-
-    public String getIdFullName() {
-        return id + ": " + firstName + " " + lastName;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public boolean isActive() {
@@ -138,17 +98,6 @@ public class User {
             this.token.setUser(this);
         }
         this.token.setToken(token);
-    }
-
-    public Set<Role> getRoles() {
-        if (roles == null) {
-            roles = new HashSet<>();
-        }
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
 }

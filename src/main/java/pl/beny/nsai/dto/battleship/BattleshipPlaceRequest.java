@@ -1,4 +1,4 @@
-package pl.beny.nsai.dto;
+package pl.beny.nsai.dto.battleship;
 
 import pl.beny.nsai.game.battleship.BattleshipBoard;
 import pl.beny.nsai.util.GamesException;

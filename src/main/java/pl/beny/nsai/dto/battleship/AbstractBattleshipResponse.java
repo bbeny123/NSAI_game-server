@@ -1,4 +1,4 @@
-package pl.beny.nsai.dto;
+package pl.beny.nsai.dto.battleship;
 
 public abstract class AbstractBattleshipResponse {
 

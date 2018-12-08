@@ -1,6 +1,6 @@
 package pl.beny.nsai.game.battleship;
 
-import pl.beny.nsai.dto.BattleshipFireResponse;
+import pl.beny.nsai.dto.battleship.BattleshipFireResponse;
 import pl.beny.nsai.game.battleship.BattleshipShips.Ships;
 import pl.beny.nsai.util.GamesException;
 import pl.beny.nsai.util.GamesException.GamesErrors;

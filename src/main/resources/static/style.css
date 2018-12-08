@@ -1,29 +1,3 @@
 .g-recaptcha > div {
     margin: 0 auto;
 }
-
-.flag-icon {
-    background-size: contain;
-    background-position: 50%;
-    background-repeat: no-repeat;
-    display: inline-block;
-    width: 1.33333333em;
-    height: auto;
-    line-height: 1em
-}
-
-.flag-icon:before {
-    content: "\00a0"
-}
-
-.flag-icon-pl {
-    background-image: url(../resources/pl.svg)
-}
-
-.flag-icon-us {
-    background-image: url(../resources/us.svg)
-}
-
-.flag-icon-fr {
-    background-image: url(../resources/fr.svg)
-}
