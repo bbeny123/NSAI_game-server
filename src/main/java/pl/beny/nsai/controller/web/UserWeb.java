@@ -1,4 +1,4 @@
-package pl.beny.nsai.controller;
+package pl.beny.nsai.controller.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -7,18 +7,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import pl.beny.nsai.dto.UserResponse;
+import pl.beny.nsai.dto.user.UserResponse;
 import pl.beny.nsai.service.UserService;
 
 import java.util.stream.Collectors;
 
 @Controller
-public class UserController extends BaseController {
+public class UserWeb extends BaseWeb {
 
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService, MessageSource messageSource) {
+    public UserWeb(UserService userService, MessageSource messageSource) {
         super("users", "/users", messageSource, true);
         this.userService = userService;
     }

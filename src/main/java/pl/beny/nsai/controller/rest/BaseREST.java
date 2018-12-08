@@ -1,4 +1,4 @@
-package pl.beny.nsai.controller;
+package pl.beny.nsai.controller.rest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +11,7 @@ import pl.beny.nsai.model.UserContext;
 import pl.beny.nsai.util.ContextHolder;
 import pl.beny.nsai.util.GamesException;
 
-public abstract class AbstractRESTController {
+public abstract class BaseREST {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
 
@@ -24,7 +24,7 @@ public abstract class AbstractRESTController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> validException(MethodArgumentNotValidException ex) {
         logger.warn(ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ex));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ex));
     }
 
     @ExceptionHandler(Exception.class)
@@ -44,5 +44,4 @@ public abstract class AbstractRESTController {
     protected <T> ResponseEntity<T> ok(T t) {
         return ResponseEntity.ok(t);
     }
-
 }

@@ -1,4 +1,4 @@
-package pl.beny.nsai.controller;
+package pl.beny.nsai.controller.web;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +14,7 @@ import pl.beny.nsai.model.UserContext;
 import pl.beny.nsai.util.ContextHolder;
 import pl.beny.nsai.util.GamesException;
 
-public abstract class BaseController {
+public abstract class BaseWeb {
 
     final String viewName;
     final String url;
@@ -23,14 +23,14 @@ public abstract class BaseController {
     private final MessageSource messageSource;
     private boolean listView;
 
-    public BaseController(String viewName, String url, MessageSource messageSource) {
+    public BaseWeb(String viewName, String url, MessageSource messageSource) {
         this.logger = LogManager.getLogger(this.getClass());
         this.messageSource = messageSource;
         this.viewName = viewName;
         this.url = url;
     }
 
-    public BaseController(String viewName, String url, MessageSource messageSource, boolean listView) {
+    public BaseWeb(String viewName, String url, MessageSource messageSource, boolean listView) {
         this(viewName, url, messageSource);
         this.listView = listView;
     }

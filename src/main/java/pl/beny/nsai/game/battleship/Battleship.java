@@ -5,12 +5,16 @@ import pl.beny.nsai.dto.battleship.BattleshipFireRequest;
 import pl.beny.nsai.dto.battleship.BattleshipFireResponse;
 import pl.beny.nsai.dto.battleship.BattleshipPlaceRequest;
 import pl.beny.nsai.dto.battleship.BattleshipPlacedResponse;
+import pl.beny.nsai.game.Game;
 import pl.beny.nsai.util.GamesException;
+
+import java.time.LocalDateTime;
 
 import static pl.beny.nsai.util.GamesException.GamesErrors.*;
 
-public class Battleship {
+public class Battleship implements Game {
 
+    private LocalDateTime lastActivity = LocalDateTime.now();
     private int STATUS = BattleshipStatus.PREPARING;
 
     private BattleshipPlayer player = new BattleshipPlayer();
@@ -50,4 +54,13 @@ public class Battleship {
         return response;
     }
 
+    @Override
+    public LocalDateTime getLastActivity() {
+        return lastActivity;
+    }
+
+    @Override
+    public void setLastActivity(LocalDateTime lastActivity) {
+        this.lastActivity = lastActivity;
+    }
 }

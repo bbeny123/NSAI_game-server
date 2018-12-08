@@ -1,4 +1,4 @@
-package pl.beny.nsai.controller;
+package pl.beny.nsai.controller.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import pl.beny.nsai.dto.UserRequest;
+import pl.beny.nsai.dto.user.UserRequest;
 import pl.beny.nsai.service.TokenService;
 import pl.beny.nsai.service.UserService;
 import pl.beny.nsai.util.CaptchaUtil;
@@ -15,13 +15,13 @@ import pl.beny.nsai.util.CaptchaUtil;
 import javax.validation.Valid;
 
 @Controller
-public class RegistrationController extends BaseController {
+public class RegistrationWeb extends BaseWeb {
 
     private final UserService userService;
     private final TokenService tokenService;
 
     @Autowired
-    public RegistrationController(UserService userService, TokenService tokenService, MessageSource messageSource) {
+    public RegistrationWeb(UserService userService, TokenService tokenService, MessageSource messageSource) {
         super("registration", "/register", messageSource);
         this.userService = userService;
         this.tokenService = tokenService;

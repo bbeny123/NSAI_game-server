@@ -1,10 +1,10 @@
-package pl.beny.nsai.controller;
+package pl.beny.nsai.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.beny.nsai.dto.ResendRequest;
-import pl.beny.nsai.dto.UserRequest;
+import pl.beny.nsai.dto.user.ResendRequest;
+import pl.beny.nsai.dto.user.UserRequest;
 import pl.beny.nsai.service.TokenService;
 import pl.beny.nsai.service.UserService;
 import pl.beny.nsai.util.CaptchaUtil;
@@ -13,13 +13,13 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/rest")
-public class UserRESTController extends AbstractRESTController {
+public class UserREST extends BaseREST {
 
     private final UserService userService;
     private final TokenService tokenService;
 
     @Autowired
-    public UserRESTController(UserService userService, TokenService tokenService) {
+    public UserREST(UserService userService, TokenService tokenService) {
         this.userService = userService;
         this.tokenService = tokenService;
     }

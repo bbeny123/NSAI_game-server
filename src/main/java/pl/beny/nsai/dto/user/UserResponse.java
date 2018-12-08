@@ -1,17 +1,21 @@
-package pl.beny.nsai.dto;
+package pl.beny.nsai.dto.user;
 
 import pl.beny.nsai.model.User;
 
-public class UserListResponse {
+public class UserResponse {
 
     private Long id;
     private String email;
     private String name;
+    private String type;
+    private boolean active;
 
-    public UserListResponse(User user) {
+    public UserResponse(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
         this.name = user.getName();
+        this.type = user.getType().name();
+        this.active = user.isActive();
     }
 
     public Long getId() {
@@ -36,6 +40,22 @@ public class UserListResponse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }

@@ -1,4 +1,4 @@
-package pl.beny.nsai.controller;
+package pl.beny.nsai.controller.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class LoginController extends BaseController {
+public class LoginWeb extends BaseWeb {
 
     @Autowired
-    public LoginController(MessageSource messageSource) {
+    public LoginWeb(MessageSource messageSource) {
         super("login", "/login", messageSource);
     }
 

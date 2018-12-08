@@ -1,7 +1,10 @@
 package pl.beny.nsai.game.checkers;
 
 import pl.beny.nsai.dto.CheckersRequest;
+import pl.beny.nsai.game.Game;
 import pl.beny.nsai.util.GamesException;
+
+import java.time.LocalDateTime;
 
 import static pl.beny.nsai.game.checkers.Checkers.Status.*;
 import static pl.beny.nsai.game.checkers.CheckersMan.Side.BLACK;
@@ -9,7 +12,7 @@ import static pl.beny.nsai.game.checkers.CheckersMan.Side.WHITE;
 import static pl.beny.nsai.util.GamesException.GamesErrors.CHECKERS_COMPUTER_TURN;
 import static pl.beny.nsai.util.GamesException.GamesErrors.CHECKERS_PLAYER_TURN;
 
-public class Checkers {
+public class Checkers implements Game {
 
     public interface Status {
         int WHITE_TURN = 0;
@@ -19,6 +22,7 @@ public class Checkers {
         int TIE = 4;
     }
 
+    private LocalDateTime lastActivity = LocalDateTime.now();
     private CheckersBoard board = new CheckersBoard();
     private CheckersPossibleMoves forcedCapture;
     private int status = Status.WHITE_TURN;
@@ -88,4 +92,13 @@ public class Checkers {
         return board.copy();
     }
 
+    @Override
+    public LocalDateTime getLastActivity() {
+        return lastActivity;
+    }
+
+    @Override
+    public void setLastActivity(LocalDateTime lastActivity) {
+        this.lastActivity = lastActivity;
+    }
 }

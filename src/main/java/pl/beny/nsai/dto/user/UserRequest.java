@@ -1,4 +1,4 @@
-package pl.beny.nsai.dto;
+package pl.beny.nsai.dto.user;
 
 import org.hibernate.validator.constraints.Length;
 import pl.beny.nsai.model.User;
@@ -43,6 +43,7 @@ public class UserRequest {
         this.name = name;
     }
 
+    @NotEmpty
     public String getCaptchaResponse() {
         return captchaResponse;
     }
