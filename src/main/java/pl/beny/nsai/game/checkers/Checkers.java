@@ -2,9 +2,11 @@ package pl.beny.nsai.game.checkers;
 
 import pl.beny.nsai.dto.CheckersRequest;
 import pl.beny.nsai.game.Game;
+import pl.beny.nsai.game.battleship.Battleship;
 import pl.beny.nsai.util.GamesException;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import static pl.beny.nsai.game.checkers.Checkers.Status.*;
 import static pl.beny.nsai.game.checkers.CheckersMan.Side.BLACK;
@@ -12,7 +14,12 @@ import static pl.beny.nsai.game.checkers.CheckersMan.Side.WHITE;
 import static pl.beny.nsai.util.GamesException.GamesErrors.CHECKERS_COMPUTER_TURN;
 import static pl.beny.nsai.util.GamesException.GamesErrors.CHECKERS_PLAYER_TURN;
 
-public class Checkers implements Game {
+public class Checkers extends Game {
+
+    public enum Difficulty {
+        OloAI,
+        MinMax
+    }
 
     public interface Status {
         int WHITE_TURN = 0;
@@ -23,6 +30,7 @@ public class Checkers implements Game {
     }
 
     private LocalDateTime lastActivity = LocalDateTime.now();
+    private Difficulty difficulty = Difficulty.OloAI;
     private CheckersBoard board = new CheckersBoard();
     private CheckersPossibleMoves forcedCapture;
     private int status = Status.WHITE_TURN;
@@ -93,12 +101,7 @@ public class Checkers implements Game {
     }
 
     @Override
-    public LocalDateTime getLastActivity() {
-        return lastActivity;
-    }
-
-    @Override
-    public void setLastActivity(LocalDateTime lastActivity) {
-        this.lastActivity = lastActivity;
+    public void setDifficulty(String difficultyLevel) {
+        this.difficulty = Difficulty.valueOf(difficultyLevel);
     }
 }

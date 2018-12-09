@@ -2,9 +2,13 @@ package pl.beny.nsai.controller.rest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import pl.beny.nsai.dto.GameRequest;
 import pl.beny.nsai.game.Game;
 import pl.beny.nsai.game.GamesHolder;
 import pl.beny.nsai.util.GamesException;
+
+import javax.validation.Valid;
 
 import static pl.beny.nsai.util.GamesException.GamesErrors.GAME_NOT_FOUND;
 
@@ -19,8 +23,10 @@ public abstract class BaseGameREST<T extends Game> extends BaseREST {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<?> newGame() throws Exception {
-        gamesHolder.put(getUserContext().getUserId(), clz.newInstance());
+    public ResponseEntity<?> newGame(@Valid @RequestBody GameRequest request) throws Exception {
+        T game = clz.newInstance();
+        game.setDifficultyLevel(request.getDifficulty());
+        gamesHolder.put(getUserContext().getUserId(), game);
         return ok();
     }
 
@@ -32,7 +38,4 @@ public abstract class BaseGameREST<T extends Game> extends BaseREST {
         return clz.cast(game);
     }
 
-    protected GamesHolder getGamesHolder() {
-        return gamesHolder;
-    }
 }

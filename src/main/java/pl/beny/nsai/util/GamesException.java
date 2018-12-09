@@ -14,6 +14,7 @@ public class GamesException extends RuntimeException {
         TOKEN_NOT_EXISTS(6, "The token does not exist in database", HttpStatus.NOT_FOUND),
         USER_ALREADY_ACTIVE(7, "User connected with this email is already active", HttpStatus.CONFLICT),
 
+        DIFFICULTY_INCORRECT(99, "Incorrect difficulty level", HttpStatus.BAD_REQUEST),
         GAME_NOT_FOUND(100, "Game not found", HttpStatus.NOT_FOUND),
 
         BATTLESHIP_WRONG_SIZE(101, "The ship of that size does not exist", HttpStatus.BAD_REQUEST),

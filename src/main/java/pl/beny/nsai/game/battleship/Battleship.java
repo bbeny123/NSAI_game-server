@@ -9,12 +9,17 @@ import pl.beny.nsai.game.Game;
 import pl.beny.nsai.util.GamesException;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import static pl.beny.nsai.util.GamesException.GamesErrors.*;
 
-public class Battleship implements Game {
+public class Battleship extends Game {
 
-    private LocalDateTime lastActivity = LocalDateTime.now();
+    public enum Difficulty {
+        OloAI
+    }
+
+    private Difficulty difficulty = Difficulty.OloAI;
     private int STATUS = BattleshipStatus.PREPARING;
 
     private BattleshipPlayer player = new BattleshipPlayer();
@@ -55,12 +60,7 @@ public class Battleship implements Game {
     }
 
     @Override
-    public LocalDateTime getLastActivity() {
-        return lastActivity;
-    }
-
-    @Override
-    public void setLastActivity(LocalDateTime lastActivity) {
-        this.lastActivity = lastActivity;
+    public void setDifficulty(String difficultyLevel) {
+        this.difficulty = Difficulty.valueOf(difficultyLevel);
     }
 }

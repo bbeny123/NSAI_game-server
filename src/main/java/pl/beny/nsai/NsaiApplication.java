@@ -18,16 +18,6 @@ public class NsaiApplication implements WebMvcConfigurer {
         SpringApplication.run(NsaiApplication.class, args);
     }
 
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addConverterFactory(new ConverterFactory<String, Enum>() {
-            @Override
-            public <T extends Enum> Converter<String, T> getConverter(Class<T> targetType) {
-                return source -> (T) Enum.valueOf(targetType, source);
-            }
-        });
-    }
-
     @Bean
     protected RestTemplate restTemplate() {
         return new RestTemplate();
