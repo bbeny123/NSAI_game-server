@@ -3,6 +3,8 @@ package pl.beny.nsai.game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import pl.beny.nsai.dto.ResponseWrapper;
+import reactor.core.publisher.FluxSink;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -45,4 +47,12 @@ public class GamesHolder extends LinkedHashMap<Long, Game> {
             game.newGameAsync();
         }
     }
+
+    @Async
+    public void moveAI(FluxSink<ResponseWrapper> sink, Long userId, Game game) {
+        if (game != null) {
+            game.moveAI().forEach(r -> sink.next(new ResponseWrapper(userId, r)));
+        }
+    }
+
 }

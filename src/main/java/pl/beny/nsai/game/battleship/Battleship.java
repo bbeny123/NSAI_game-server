@@ -2,11 +2,15 @@ package pl.beny.nsai.game.battleship;
 
 import pl.beny.nsai.dto.battleship.BattleshipFireRequest;
 import pl.beny.nsai.dto.battleship.BattleshipFireResponse;
+import pl.beny.nsai.dto.battleship.BattleshipFireResponse.BattleshipFireTurn;
 import pl.beny.nsai.dto.battleship.BattleshipPlaceRequest;
 import pl.beny.nsai.dto.battleship.BattleshipStatusResponse;
 import pl.beny.nsai.dto.battleship.BattleshipStatusResponse.BattleshipStatus;
 import pl.beny.nsai.game.Game;
 import pl.beny.nsai.util.GamesException;
+
+import java.util.Collections;
+import java.util.List;
 
 import static pl.beny.nsai.util.GamesException.GamesErrors.*;
 
@@ -17,6 +21,7 @@ public class Battleship extends Game {
     }
 
     private int STATUS = BattleshipStatus.PREPARING;
+    private int FIRE_TURN = BattleshipStatus.PREPARING;
     private Difficulty difficulty = Difficulty.OloAI;
     private final BattleshipPlayer player = new BattleshipPlayer();
     private final BattleshipPlayer computer = new BattleshipPlayer();
@@ -63,14 +68,20 @@ public class Battleship extends Game {
             return new BattleshipFireResponse(BattleshipStatus.WIN);
         }
 
+        FIRE_TURN = BattleshipFireTurn.COMPUTER_TURN;
+        return new BattleshipFireResponse(result, FIRE_TURN);
+    }
+
+    @Override
+    public List<Object> moveAI() {
         BattleshipFireResponse response = BattleshipRandomAI.fire(player.getBoard());
         if (response.getEnemyStatus() > 0 && player.getShips().destroyShip() <= 0) {
             STATUS = BattleshipStatus.DEFEAT;
-            return new BattleshipFireResponse(BattleshipStatus.DEFEAT);
+            return Collections.singletonList(new BattleshipFireResponse(BattleshipStatus.DEFEAT));
         }
 
-        response.setPlayerStatus(result);
-        return response;
+        FIRE_TURN = BattleshipFireTurn.PLAYER_TURN;
+        return Collections.singletonList(response);
     }
 
 }

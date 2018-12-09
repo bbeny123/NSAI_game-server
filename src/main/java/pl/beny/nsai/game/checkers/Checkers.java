@@ -2,17 +2,16 @@ package pl.beny.nsai.game.checkers;
 
 import pl.beny.nsai.dto.CheckersRequest;
 import pl.beny.nsai.game.Game;
-import pl.beny.nsai.game.battleship.Battleship;
 import pl.beny.nsai.util.GamesException;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import static pl.beny.nsai.game.checkers.Checkers.Status.*;
 import static pl.beny.nsai.game.checkers.CheckersMan.Side.BLACK;
 import static pl.beny.nsai.game.checkers.CheckersMan.Side.WHITE;
 import static pl.beny.nsai.util.GamesException.GamesErrors.CHECKERS_COMPUTER_TURN;
-import static pl.beny.nsai.util.GamesException.GamesErrors.CHECKERS_PLAYER_TURN;
 
 public class Checkers extends Game {
 
@@ -51,31 +50,26 @@ public class Checkers extends Game {
         endTurn();
         result.setStatus(status);
 
-        if (status == Status.BLACK_TURN) {
-            CheckersResult computerResult = moveAI();
-            result.setComputerSource(computerResult.getComputerSource());
-            result.setComputerTarget(computerResult.getComputerTarget());
-            result.setComputerCaptured(computerResult.getComputerCaptured());
-            result.setStatus(status);
-        }
-
         return result;
     }
 
-    public CheckersResult moveAI() throws GamesException {
-        if (status == Status.WHITE_TURN) {
-            throw new GamesException(CHECKERS_PLAYER_TURN);
+    @Override
+    public List<Object> moveAI() throws GamesException {
+        List<Object> results = new ArrayList<>();
+
+        while (status == Status.BLACK_TURN) {
+            CheckersResult result = CheckersOloAI.moveAI(board, forcedCapture);
+            status = result.getStatus();
+            forcedCapture = result.getForceToCapture();
+            result.setForceToCapture(null);
+
+            endTurn();
+            result.setStatus(status);
+
+            results.add(result);
         }
 
-        CheckersResult result = CheckersOloAI.moveAI(board, forcedCapture);
-        status = result.getStatus();
-        forcedCapture = result.getForceToCapture();
-        result.setForceToCapture(null);
-
-        endTurn();
-        result.setStatus(status);
-
-        return result;
+        return results;
     }
 
 
@@ -94,10 +88,6 @@ public class Checkers extends Game {
         } else if (status == BLACK_TURN && !blackMoves) {
             status = WHITE_TURN;
         }
-    }
-
-    public CheckersBoard copyBoard() {
-        return board.copy();
     }
 
     @Override

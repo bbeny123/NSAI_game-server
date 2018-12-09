@@ -6,6 +6,8 @@ import pl.beny.nsai.util.GamesException;
 
 import java.util.Random;
 
+import static pl.beny.nsai.dto.battleship.BattleshipFireResponse.BattleshipFireTurn.PLAYER_TURN;
+
 public class BattleshipRandomAI {
 
     public static void placeShips(BattleshipShips ships, BattleshipBoard board) throws GamesException {
@@ -31,7 +33,7 @@ public class BattleshipRandomAI {
             try {
                 int x = new Random().nextInt(BattleshipBoard.BOARD_SIZE);
                 int y = new Random().nextInt(BattleshipBoard.BOARD_SIZE);
-                return new BattleshipFireResponse(x, y, board.fire(x, y));
+                return new BattleshipFireResponse(x, y, board.fire(x, y), PLAYER_TURN);
             } catch (Exception e) {
             }
         }

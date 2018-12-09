@@ -33,6 +33,7 @@ public class TokenConverter extends JwtAccessTokenConverter {
             UserContext user = (UserContext) authentication.getPrincipal();
             Map<String, Object> additionalInfo = new HashMap<>();
             additionalInfo.put("type", user.getPrincipal().getType());
+            additionalInfo.put("userId", user.getPrincipal().getId());
             ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
         }
         return accessToken;
