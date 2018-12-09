@@ -34,32 +34,40 @@ public class CheckersBoard {
         }
     }
 
-    private void initBoard() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = (i + 1) % 2; j < 8; j += 2) {
-                board[i][j] = new CheckersMan(i, j, null, PROHIBITED);
-            }
-        }
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = i % 2; j < 8; j += 2) {
-                board[i][j] = new CheckersMan(i, j, BLACK, MAN);
-            }
-        }
-
-        for (int i = 7; i > 4; i--) {
-            for (int j = i % 2; j < 8; j += 2) {
-                board[i][j] = new CheckersMan(i, j, WHITE, MAN);
-            }
-        }
+    public CheckersBoard copy() {
+        return new CheckersBoard(this.board);
     }
 
     private CheckersMan board(int x, int y) {
-        return board[x][y];
+        return board[y][x];
     }
 
     private CheckersMan board(CheckersMan men) {
-        return board[men.x][men.y];
+        return board[men.y][men.x];
+    }
+
+    private void board(int x, int y, CheckersMan men) {
+        board[y][x] = men;
+    }
+
+    private void initBoard() {
+        for (int y = 0; y < 8; y++) {
+            for (int x = (y + 1) % 2; x < 8; x += 2) {
+                board(x, y, new CheckersMan(x, y, null, PROHIBITED));
+            }
+        }
+
+        for (int y = 0; y < 3; y++) {
+            for (int x = y % 2; x < 8; x += 2) {
+                board(x, y, new CheckersMan(x, y, BLACK, MAN));
+            }
+        }
+
+        for (int y = 7; y > 4; y--) {
+            for (int x = y % 2; x < 8; x += 2) {
+                board(x, y, new CheckersMan(x, y, WHITE, MAN));
+            }
+        }
     }
 
     public CheckersResult move(int x1, int y1, int x2, int y2, Side side) throws GamesException {
@@ -117,7 +125,7 @@ public class CheckersBoard {
             throw new GamesException(CHECKERS_ERROR);
         }
 
-        board[captured.x][captured.y] = null;
+        board(captured.x, captured.y, null);
         return captured;
     }
 
@@ -128,8 +136,8 @@ public class CheckersBoard {
     }
 
     private void move(CheckersMan source, CheckersMan target) {
-        board[source.x][source.y] = null;
-        board[target.x][target.y] = source;
+        board(source.x, source.y, null);
+        board(target.x, target.y, source);
         source.move(target);
     }
 
@@ -152,16 +160,16 @@ public class CheckersBoard {
         List<CheckersMan> men = new ArrayList<>();
 
         if (source.whiteOrQueen() && source.x - 1 >= 0 && source.y - 1 >= 0 && board(source.x - 1, source.y - 1) == null) {
-            men.add(new CheckersMan(source.x - 1, source.y - 1));
+            men.add(new CheckersMan(source.x - 1, source.y - 1, source.side, source.type));
         }
         if (source.whiteOrQueen() && source.x + 1 <= 7 && source.y - 1 >= 0 && board(source.x + 1, source.y - 1) == null) {
-            men.add(new CheckersMan(source.x + 1, source.y - 1));
+            men.add(new CheckersMan(source.x + 1, source.y - 1, source.side, source.type));
         }
         if (source.blackOrQueen() && source.x - 1 >= 0 && source.y + 1 <= 7 && board(source.x - 1, source.y + 1) == null) {
-            men.add(new CheckersMan(source.x - 1, source.y + 1));
+            men.add(new CheckersMan(source.x - 1, source.y + 1, source.side, source.type));
         }
         if (source.blackOrQueen() && source.x + 1 <= 7 && source.y + 1 <= 7 && board(source.x + 1, source.y + 1) == null) {
-            men.add(new CheckersMan(source.x + 1, source.y + 1));
+            men.add(new CheckersMan(source.x + 1, source.y + 1, source.side, source.type));
         }
 
         return men;
@@ -264,10 +272,6 @@ public class CheckersBoard {
 
     public double getNumBlackNormalPieces() {
         return getCheckers(Side.BLACK, Type.MAN).size();
-    }
-
-    public CheckersBoard copy() {
-        return new CheckersBoard(this.board);
     }
 
 }

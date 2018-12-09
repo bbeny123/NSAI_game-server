@@ -27,7 +27,7 @@ public class CheckersREST extends BaseGameREST<Checkers> {
     public Mono<CheckersResult> move(@Valid @RequestBody CheckersRequest request) throws GamesException {
         Checkers game = getGame();
         CheckersResult result = game.move(request);
-        game.moveAI();
+        moveAi(game);
         return Mono.just(result);
     }
 
