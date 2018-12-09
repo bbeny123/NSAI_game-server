@@ -17,7 +17,7 @@ import static pl.beny.nsai.util.GamesException.GamesErrors.*;
 
 public class CheckersBoard {
 
-    private CheckersMan[][] board = new CheckersMan[7][7];
+    private CheckersMan[][] board = new CheckersMan[8][8];
 
     public CheckersBoard() {
         initBoard();
