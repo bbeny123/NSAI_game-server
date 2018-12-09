@@ -25,14 +25,15 @@ public abstract class BaseGameREST<T extends Game> extends BaseREST {
     @PostMapping("/new")
     public ResponseEntity<?> newGame(@Valid @RequestBody GameRequest request) throws Exception {
         T game = clz.newInstance();
-        game.setDifficultyLevel(request.getDifficulty());
+        game.newGame(request.getDifficulty());
+        gamesHolder.newGameAsync(game);
         gamesHolder.put(getUserContext().getUserId(), game);
         return ok();
     }
 
     protected T getGame() {
         Game game = gamesHolder.get(getUserContext().getUserId());
-        if (clz.isInstance(game)) {
+        if (!clz.isInstance(game)) {
             throw new GamesException(GAME_NOT_FOUND);
         }
         return clz.cast(game);

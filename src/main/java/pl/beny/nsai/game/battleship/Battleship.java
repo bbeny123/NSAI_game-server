@@ -8,9 +8,6 @@ import pl.beny.nsai.dto.battleship.BattleshipPlacedResponse;
 import pl.beny.nsai.game.Game;
 import pl.beny.nsai.util.GamesException;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-
 import static pl.beny.nsai.util.GamesException.GamesErrors.*;
 
 public class Battleship extends Game {
@@ -19,25 +16,42 @@ public class Battleship extends Game {
         OloAI
     }
 
-    private Difficulty difficulty = Difficulty.OloAI;
     private int STATUS = BattleshipStatus.PREPARING;
+    private Difficulty difficulty = Difficulty.OloAI;
+    private final BattleshipPlayer player = new BattleshipPlayer();
+    private final BattleshipPlayer computer = new BattleshipPlayer();
 
-    private BattleshipPlayer player = new BattleshipPlayer();
-    private BattleshipPlayer computer = new BattleshipPlayer();
+    @Override
+    public void newGameAsync() {
+        placeShipsAI();
+    }
+
+    @Override
+    protected void setDifficulty(String difficultyLevel) {
+        this.difficulty = Difficulty.valueOf(difficultyLevel);
+    }
 
     public BattleshipPlacedResponse placeShip(BattleshipPlaceRequest placeRequest) throws GamesException {
-        if (STATUS != BattleshipStatus.PREPARING) throw new GamesException(BATTLESHIP_NOT_PREPARING);
+        if (STATUS != BattleshipStatus.PREPARING)
+            throw new GamesException(BATTLESHIP_NOT_PREPARING);
         if (!player.getShips().shipAvailable(placeRequest.size()))
             throw new GamesException(BATTLESHIP_SIZE_NOT_AVAILABLE);
 
         player.getBoard().placeShip(placeRequest.getX1(), placeRequest.getY1(), placeRequest.getX2(), placeRequest.getY2());
         player.getShips().placeShip(placeRequest.size());
-        BattleshipRandomAI.placeShip(computer.getShips(), computer.getBoard());
 
         if (player.getShips().allShipsPlaced() && computer.getShips().allShipsPlaced())
             STATUS = BattleshipStatus.BATTLE;
 
-        return new BattleshipPlacedResponse(STATUS);
+        return new BattleshipPlacedResponse(player.getShips().allShipsPlaced() ? BattleshipStatus.BATTLE : STATUS);
+    }
+
+    private void placeShipsAI() throws GamesException {
+        if (difficulty == Difficulty.OloAI) {
+            BattleshipRandomAI.placeShips(computer.getShips(), computer.getBoard());
+        }
+        if (player.getShips().allShipsPlaced() && computer.getShips().allShipsPlaced())
+            STATUS = BattleshipStatus.BATTLE;
     }
 
     public BattleshipFireResponse fire(BattleshipFireRequest fireRequest) throws GamesException {
@@ -59,8 +73,4 @@ public class Battleship extends Game {
         return response;
     }
 
-    @Override
-    public void setDifficulty(String difficultyLevel) {
-        this.difficulty = Difficulty.valueOf(difficultyLevel);
-    }
 }

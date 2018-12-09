@@ -1,11 +1,10 @@
 package pl.beny.nsai.game;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import pl.beny.nsai.game.battleship.Battleship;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -13,27 +12,37 @@ import java.util.Map;
 public class GamesHolder extends LinkedHashMap<Long, Game> {
 
     @Autowired
-    private GamesHolder() {
+    public GamesHolder() {
         super(16, 0.75f, true);
     }
 
     @Override
     public Game get(Object key) {
         Game game = super.get(key);
-        game.setLastActivity(LocalDateTime.now());
+        if (game != null) {
+            game.updateLastActivity();
+        }
         return game;
     }
 
     @Override
     public Game getOrDefault(Object key, Game defaultValue) {
         Game game = super.getOrDefault(key, defaultValue);
-        game.setLastActivity(LocalDateTime.now());
+        if (game != null) {
+            game.updateLastActivity();
+        }
         return game;
     }
 
     @Override
     protected boolean removeEldestEntry(Map.Entry<Long, Game> eldest) {
-        return LocalDateTime.now().minusHours(1).isBefore(eldest.getValue().getLastActivity());
+        return LocalDateTime.now().minusHours(1).isAfter(eldest.getValue().lastActivity());
     }
 
+    @Async
+    public void newGameAsync(Game game) {
+        if (game != null) {
+            game.newGameAsync();
+        }
+    }
 }
