@@ -22,13 +22,21 @@ public class BattleshipBoard {
 
     private int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
 
+    private int board(int x, int y) {
+        return board[y][x];
+    }
+
+    private void board(int x, int y, int status) {
+        board[y][x] = status;
+    }
+
     public void placeShip(int x1, int y1, int x2, int y2) throws GamesException {
         inBoard(x1, y1, x2, y2);
         placeAvailable(x1, y1, x2, y2);
 
-        for (int i = Math.min(x1, x2); i <= Math.max(x1, x2); i++) {
-            for (int j = Math.min(y1, y2); j <= Math.max(y1, y2); j++) {
-                board[i][j] = BoardStatus.SHIP;
+        for (int x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
+            for (int y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) {
+                board(x, y, BoardStatus.SHIP);
             }
         }
     }
@@ -36,19 +44,19 @@ public class BattleshipBoard {
     public int fire(int x, int y) throws GamesException {
         inBoard(x, y);
         alreadyFired(x, y);
-        if (board[x][y] == BoardStatus.SHIP) {
-            board[x][y] = BoardStatus.SHIP_HIT;
+        if (board(x, y) == BoardStatus.SHIP) {
+            board(x, y, BoardStatus.SHIP_HIT);
             return hit(x, y);
         } else {
-            board[x][y] = BoardStatus.FIRED;
+            board(x, y, BoardStatus.FIRED);
             return FireStatus.MISS;
         }
     }
 
     private void placeAvailable(int x1, int y1, int x2, int y2) throws GamesException {
-        for (int i = rangeFrom(x1, x2); i <= rangeTo(x1, x2); i++) {
-            for (int j = rangeFrom(y1, y2); j <= rangeTo(y1, y2); j++) {
-                if (board[i][j] != BoardStatus.NOTHING) {
+        for (int x = rangeFrom(x1, x2); x <= rangeTo(x1, x2); x++) {
+            for (int y = rangeFrom(y1, y2); y <= rangeTo(y1, y2); y++) {
+                if (board(x, y) != BoardStatus.NOTHING) {
                     throw new GamesException(BATTLESHIP_WRONG_PLACEMENT);
                 }
             }
@@ -77,7 +85,7 @@ public class BattleshipBoard {
 
 
     private void alreadyFired(int x, int y) throws GamesException {
-        if (board[x][y] == BoardStatus.SHIP_HIT || board[x][y] == BoardStatus.FIRED) {
+        if (board(x, y) == BoardStatus.SHIP_HIT || board(x, y) == BoardStatus.FIRED) {
             throw new GamesException(BATTLESHIP_PLACE_FIRED);
         }
     }
@@ -87,9 +95,9 @@ public class BattleshipBoard {
         int hit = 1;
 
         for (int i = x - 1; i >= 0; i--) {
-            if (board[i][y] == BoardStatus.NOTHING || board[i][y] == BoardStatus.FIRED) {
+            if (board(i, y) == BoardStatus.NOTHING || board(i, y) == BoardStatus.FIRED) {
                 break;
-            } else if (board[i][y] == BoardStatus.SHIP) {
+            } else if (board(i, y) == BoardStatus.SHIP) {
                 return FireStatus.HIT;
             } else {
                 hit++;
@@ -97,9 +105,9 @@ public class BattleshipBoard {
         }
 
         for (int i = x + 1; i < BOARD_SIZE; i++) {
-            if (board[i][y] == BoardStatus.NOTHING || board[i][y] == BoardStatus.FIRED) {
+            if (board(i, y) == BoardStatus.NOTHING || board(i, y) == BoardStatus.FIRED) {
                 break;
-            } else if (board[i][y] == BoardStatus.SHIP) {
+            } else if (board(i, y) == BoardStatus.SHIP) {
                 return FireStatus.HIT;
             } else {
                 hit++;
@@ -107,9 +115,9 @@ public class BattleshipBoard {
         }
 
         for (int i = y - 1; i >= 0; i--) {
-            if (board[x][i] == BoardStatus.NOTHING || board[x][i] == BoardStatus.FIRED) {
+            if (board(x, i) == BoardStatus.NOTHING || board(x, i) == BoardStatus.FIRED) {
                 break;
-            } else if (board[x][i] == BoardStatus.SHIP) {
+            } else if (board(x, i) == BoardStatus.SHIP) {
                 return FireStatus.HIT;
             } else {
                 hit++;
@@ -117,9 +125,9 @@ public class BattleshipBoard {
         }
 
         for (int i = y + 1; i < BOARD_SIZE; i++) {
-            if (board[x][i] == BoardStatus.NOTHING || board[x][i] == BoardStatus.FIRED) {
+            if (board(x, i) == BoardStatus.NOTHING || board(x, i) == BoardStatus.FIRED) {
                 break;
-            } else if (board[x][i] == BoardStatus.SHIP) {
+            } else if (board(x, i) == BoardStatus.SHIP) {
                 return FireStatus.HIT;
             } else {
                 hit++;
