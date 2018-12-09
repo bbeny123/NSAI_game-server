@@ -8,7 +8,7 @@ import java.util.Random;
 
 import static pl.beny.nsai.dto.battleship.BattleshipFireResponse.BattleshipFireTurn.PLAYER_TURN;
 
-public class BattleshipRandomAI {
+public class BattleshipOloAI {
 
     public static void placeShips(BattleshipShips ships, BattleshipBoard board) throws GamesException {
         for (int i = Ships.SIZE_4; i >= Ships.SIZE_1; i--) {
@@ -38,5 +38,4 @@ public class BattleshipRandomAI {
             }
         }
     }
-
 }

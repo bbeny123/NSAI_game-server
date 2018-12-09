@@ -53,8 +53,9 @@ public class Battleship extends Game {
 
     private void placeShipsAI() throws GamesException {
         if (difficulty == Difficulty.OloAI) {
-            BattleshipRandomAI.placeShips(computer.getShips(), computer.getBoard());
+            BattleshipOloAI.placeShips(computer.getShips(), computer.getBoard());
         }
+
         if (player.getShips().allShipsPlaced() && computer.getShips().allShipsPlaced())
             STATUS = BattleshipStatus.BATTLE;
     }
@@ -74,7 +75,12 @@ public class Battleship extends Game {
 
     @Override
     public List<Object> moveAI() {
-        BattleshipFireResponse response = BattleshipRandomAI.fire(player.getBoard());
+        BattleshipFireResponse response = null;
+
+        if (difficulty == Difficulty.OloAI) {
+            response = BattleshipOloAI.fire(player.getBoard());
+        }
+
         if (response.getEnemyStatus() > 0 && player.getShips().destroyShip() <= 0) {
             STATUS = BattleshipStatus.DEFEAT;
             return Collections.singletonList(new BattleshipFireResponse(BattleshipStatus.DEFEAT));

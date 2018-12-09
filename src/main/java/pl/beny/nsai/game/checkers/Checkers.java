@@ -58,7 +58,14 @@ public class Checkers extends Game {
         List<Object> results = new ArrayList<>();
 
         while (status == Status.BLACK_TURN) {
-            CheckersResult result = CheckersOloAI.moveAI(board, forcedCapture);
+            CheckersResult result = null;
+
+            if (difficulty == Difficulty.OloAI) {
+                result = CheckersOloAI.moveAI(board, forcedCapture);
+            } else if (difficulty == Difficulty.MinMax) {
+                result = new MinMaxAlgorithm(BLACK).makeMove(board);
+            }
+
             status = result.getStatus();
             forcedCapture = result.getForceToCapture();
             result.setForceToCapture(null);
