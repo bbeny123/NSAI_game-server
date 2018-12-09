@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.beny.nsai.dto.battleship.BattleshipFireRequest;
 import pl.beny.nsai.dto.battleship.BattleshipPlaceRequest;
+import pl.beny.nsai.dto.battleship.BattleshipStatusResponse;
 import pl.beny.nsai.game.GamesHolder;
 import pl.beny.nsai.game.battleship.Battleship;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 
@@ -23,9 +25,9 @@ public class BattleshipREST extends BaseGameREST<Battleship> {
     }
 
     @PostMapping("/place")
-    public ResponseEntity<?> placeShip(@Valid @RequestBody BattleshipPlaceRequest placeRequest) throws Exception {
+    public Mono<BattleshipStatusResponse> placeShip(@Valid @RequestBody BattleshipPlaceRequest placeRequest) throws Exception {
         placeRequest.isValid();
-        return ok(getGame().placeShip(placeRequest));
+        return Mono.just(getGame().placeShip(placeRequest));
     }
 
     @PostMapping("/fire")

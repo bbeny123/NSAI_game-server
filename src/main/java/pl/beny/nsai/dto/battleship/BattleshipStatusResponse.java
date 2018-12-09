@@ -1,12 +1,16 @@
 package pl.beny.nsai.dto.battleship;
 
-public abstract class AbstractBattleshipResponse {
+public class BattleshipStatusResponse {
 
     public interface BattleshipStatus {
         int PREPARING = 0;
         int BATTLE = 1;
         int WIN = 2;
         int DEFEAT = 3;
+    }
+
+    public BattleshipStatusResponse(Integer gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
     protected Integer gameStatus;

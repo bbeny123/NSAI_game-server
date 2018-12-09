@@ -1,10 +1,10 @@
 package pl.beny.nsai.game.battleship;
 
-import pl.beny.nsai.dto.battleship.AbstractBattleshipResponse.BattleshipStatus;
 import pl.beny.nsai.dto.battleship.BattleshipFireRequest;
 import pl.beny.nsai.dto.battleship.BattleshipFireResponse;
 import pl.beny.nsai.dto.battleship.BattleshipPlaceRequest;
-import pl.beny.nsai.dto.battleship.BattleshipPlacedResponse;
+import pl.beny.nsai.dto.battleship.BattleshipStatusResponse;
+import pl.beny.nsai.dto.battleship.BattleshipStatusResponse.BattleshipStatus;
 import pl.beny.nsai.game.Game;
 import pl.beny.nsai.util.GamesException;
 
@@ -31,7 +31,7 @@ public class Battleship extends Game {
         this.difficulty = Difficulty.valueOf(difficultyLevel);
     }
 
-    public BattleshipPlacedResponse placeShip(BattleshipPlaceRequest placeRequest) throws GamesException {
+    public BattleshipStatusResponse placeShip(BattleshipPlaceRequest placeRequest) throws GamesException {
         if (STATUS != BattleshipStatus.PREPARING)
             throw new GamesException(BATTLESHIP_NOT_PREPARING);
         if (!player.getShips().shipAvailable(placeRequest.size()))
@@ -43,7 +43,7 @@ public class Battleship extends Game {
         if (player.getShips().allShipsPlaced() && computer.getShips().allShipsPlaced())
             STATUS = BattleshipStatus.BATTLE;
 
-        return new BattleshipPlacedResponse(player.getShips().allShipsPlaced() ? BattleshipStatus.BATTLE : STATUS);
+        return new BattleshipStatusResponse(player.getShips().allShipsPlaced() ? BattleshipStatus.BATTLE : STATUS);
     }
 
     private void placeShipsAI() throws GamesException {

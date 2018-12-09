@@ -1,6 +1,6 @@
 package pl.beny.nsai.dto.battleship;
 
-public class BattleshipFireResponse extends AbstractBattleshipResponse {
+public class BattleshipFireResponse extends BattleshipStatusResponse {
 
     private Integer x;
     private Integer y;
@@ -8,14 +8,14 @@ public class BattleshipFireResponse extends AbstractBattleshipResponse {
     private Integer enemyStatus;
 
     public BattleshipFireResponse(Integer x, Integer y, Integer enemyStatus) {
+        super(BattleshipStatus.BATTLE);
         this.x = x;
         this.y = y;
         this.enemyStatus = enemyStatus;
-        this.gameStatus = BattleshipStatus.BATTLE;
     }
 
     public BattleshipFireResponse(Integer gameStatus) {
-        this.gameStatus = gameStatus;
+        super(gameStatus);
     }
 
     public Integer getX() {
