@@ -57,7 +57,7 @@ public class Checkers extends Game {
     public List<Object> moveAI() throws GamesException {
         List<Object> results = new ArrayList<>();
 
-        while (status == Status.BLACK_TURN) {
+        for (int i = 0; i < 1000 && status == Status.BLACK_TURN ; i++) {
             CheckersResult result = null;
 
             if (difficulty == Difficulty.OloAI) {

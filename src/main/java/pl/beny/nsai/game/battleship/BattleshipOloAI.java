@@ -12,8 +12,8 @@ public class BattleshipOloAI {
 
     public static void placeShips(BattleshipShips ships, BattleshipBoard board) throws GamesException {
         for (int i = Ships.SIZE_4; i >= Ships.SIZE_1; i--) {
-            while (ships.shipAvailable(i)) {
-                while (true) {
+            for (int j = 0; j < 1000 && ships.shipAvailable(i); j++) {
+                for (int k = 0; k < 1000; k++) {
                     try {
                         int xOrY = new Random().nextInt(2);
                         int x = new Random().nextInt(xOrY == 0 ? BattleshipBoard.BOARD_SIZE : BattleshipBoard.BOARD_SIZE + 1 - i);
@@ -29,7 +29,7 @@ public class BattleshipOloAI {
     }
 
     public static BattleshipFireResponse fire(BattleshipBoard board) {
-        while (true) {
+        for (int i = 0; i < 1000; i++) {
             try {
                 int x = new Random().nextInt(BattleshipBoard.BOARD_SIZE);
                 int y = new Random().nextInt(BattleshipBoard.BOARD_SIZE);
@@ -37,5 +37,6 @@ public class BattleshipOloAI {
             } catch (Exception e) {
             }
         }
+        throw new GamesException(GamesException.GamesErrors.AI_ERROR);
     }
 }

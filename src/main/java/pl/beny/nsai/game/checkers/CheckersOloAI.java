@@ -1,5 +1,7 @@
 package pl.beny.nsai.game.checkers;
 
+import pl.beny.nsai.util.GamesException;
+
 import java.util.List;
 import java.util.Random;
 
@@ -8,7 +10,7 @@ import static pl.beny.nsai.game.checkers.CheckersMan.Side.BLACK;
 public class CheckersOloAI {
 
     public static CheckersResult moveAI(CheckersBoard board, CheckersPossibleMoves forcedCapture) {
-        while (true) {
+        for (int i = 0; i < 1000; i++) {
             try {
                 CheckersPossibleMoves move = getRandomMove(board, forcedCapture);
                 CheckersMan target = move.getPossibleTargets().get(new Random().nextInt(move.getPossibleTargets().size()));
@@ -25,6 +27,7 @@ public class CheckersOloAI {
                 e.printStackTrace();
             }
         }
+        throw new GamesException(GamesException.GamesErrors.AI_ERROR);
     }
 
     private static CheckersPossibleMoves getRandomMove(CheckersBoard board, CheckersPossibleMoves forcedCapture) {
