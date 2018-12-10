@@ -12,9 +12,9 @@ public class CheckersOloAI {
             try {
                 CheckersPossibleMoves move = getRandomMove(board, forcedCapture);
                 CheckersMan target = move.getPossibleTargets().get(new Random().nextInt(move.getPossibleTargets().size()));
-
                 CheckersMan source = new CheckersMan(move.getSource().x, move.getSource().y, BLACK, move.getSource().type);
-                CheckersResult result = board.move(move.getSource().x, move.getSource().y, target.x, target.y, BLACK);
+
+                CheckersResult result = board.move(source.x, source.y, target.x, target.y, BLACK);
                 result.setComputerSource(source);
                 result.setComputerTarget(target);
                 result.setComputerCaptured(result.getPlayerCaptured());
@@ -36,7 +36,9 @@ public class CheckersOloAI {
         List<CheckersPossibleMoves> captures = board.getPossibleCaptures(BLACK);
 
         if (!captures.isEmpty()) {
-            return captures.get(new Random().nextInt(captures.size()));
+            CheckersPossibleMoves capture = captures.get(new Random().nextInt(captures.size()));
+            capture.possibleTargetsToPlaces();
+            return capture;
         } else if (!moves.isEmpty()) {
             return moves.get(new Random().nextInt(moves.size()));
         } else {

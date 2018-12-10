@@ -2,6 +2,7 @@ package pl.beny.nsai.game.checkers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CheckersPossibleMoves {
 
@@ -26,6 +27,10 @@ public class CheckersPossibleMoves {
             possibleTargets = new ArrayList<>();
         }
         return possibleTargets;
+    }
+
+    public void possibleTargetsToPlaces() {
+        possibleTargets = possibleTargets.stream().map(t -> new CheckersMan(t.x + t.x - source.x, t.y + t.y - source.y, t.side, t.type)).collect(Collectors.toList());
     }
 
     public void setPossibleTargets(List<CheckersMan> possibleTargets) {

@@ -94,7 +94,7 @@ public class CheckersBoard {
         CheckersResult result = new CheckersResult();
         result.setStatus(side == WHITE ? BLACK_TURN : WHITE_TURN);
 
-        if (!possibleCaptures.isEmpty() && possibleCaptures.stream().noneMatch(capture -> target.x == capture.x && target.y == capture.y)) {
+        if (!possibleCaptures.isEmpty() && possibleCaptures.stream().noneMatch(capture -> (source.x + target.x) / 2 == capture.x && (source.y + target.y) / 2 == capture.y)) {
             throw new GamesException(CHECKERS_CAPTURE_FORCED);
         } else if (!possibleCaptures.isEmpty()) {
             capture(source, target, result, side);
@@ -137,8 +137,8 @@ public class CheckersBoard {
 
     private void move(CheckersMan source, CheckersMan target) {
         board(source.x, source.y, null);
-        board(target.x, target.y, source);
         source.move(target);
+        board(target.x, target.y, source);
     }
 
     public List<CheckersPossibleMoves> getPossibleMoves(Side side) {
