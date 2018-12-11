@@ -108,12 +108,11 @@ public class CheckersBoard {
 
     private void capture(CheckersMan source, CheckersMan target, CheckersResult result, Side side) throws GamesException {
         result.setPlayerCaptured(capture(source, target));
-        result.setStatus(side == WHITE ? WHITE_TURN : BLACK_TURN);
-
         move(source, target);
 
         List<CheckersMan> forceToCapture = getPossibleCaptures(board(target));
         if (!forceToCapture.isEmpty()) {
+            result.setStatus(side == WHITE ? WHITE_TURN : BLACK_TURN);
             result.setForceToCapture(new CheckersPossibleMoves(board(target), forceToCapture));
         }
     }
