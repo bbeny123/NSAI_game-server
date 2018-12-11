@@ -4,25 +4,21 @@ import pl.beny.nsai.util.GamesException;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static pl.beny.nsai.game.checkers.CheckersMan.Side.BLACK;
 
 public class CheckersOloAI {
 
-    public static CheckersResult moveAI(CheckersBoard board, CheckersPossibleMoves forcedCapture) {
+    public static CheckersResult moveAI(CheckersBoard board, CheckersMoves forcedCapture) {
         for (int i = 0; i < 1000; i++) {
             try {
-                CheckersPossibleMoves move = getRandomMove(board, forcedCapture);
-                CheckersMan target = move.getPossibleTargets().get(new Random().nextInt(move.getPossibleTargets().size()));
-                CheckersMan source = new CheckersMan(move.getSource().x, move.getSource().y, BLACK, move.getSource().type);
+                CheckersMoves move = getRandomMove(board, forcedCapture);
 
-                CheckersResult result = board.move(source.x, source.y, target.x, target.y, BLACK);
-                result.setComputerSource(source);
-                result.setComputerTarget(target);
-                result.setComputerCaptured(result.getPlayerCaptured());
-                result.setPlayerCaptured(null);
+                CheckersMan target = move.getMoves().get(ThreadLocalRandom.current().nextInt(move.getMoves().size()));
+                CheckersMan source = move.getSource();
 
-                return result;
+                return board.move(source.x, source.y, target.x, target.y, BLACK);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -30,23 +26,22 @@ public class CheckersOloAI {
         throw new GamesException(GamesException.GamesErrors.AI_ERROR);
     }
 
-    private static CheckersPossibleMoves getRandomMove(CheckersBoard board, CheckersPossibleMoves forcedCapture) {
+    private static CheckersMoves getRandomMove(CheckersBoard board, CheckersMoves forcedCapture) {
         if (forcedCapture != null) {
-            return new CheckersPossibleMoves(forcedCapture.getSource(), forcedCapture.getPossibleTargets());
+            return new CheckersMoves(forcedCapture.getSource(), forcedCapture.getMoves());
         }
 
-        List<CheckersPossibleMoves> moves = board.getPossibleMoves(BLACK);
-        List<CheckersPossibleMoves> captures = board.getPossibleCaptures(BLACK);
-
-        if (!captures.isEmpty()) {
-            CheckersPossibleMoves capture = captures.get(new Random().nextInt(captures.size()));
-            capture.possibleTargetsToPlaces();
-            return capture;
-        } else if (!moves.isEmpty()) {
+        List<CheckersMoves> moves = board.getMoves(BLACK, true);
+        if (!moves.isEmpty()) {
             return moves.get(new Random().nextInt(moves.size()));
-        } else {
-            return null;
         }
+
+        moves = board.getMoves(BLACK, false);
+        if (!moves.isEmpty()) {
+            return moves.get(new Random().nextInt(moves.size()));
+        }
+
+        return null;
     }
 
 }

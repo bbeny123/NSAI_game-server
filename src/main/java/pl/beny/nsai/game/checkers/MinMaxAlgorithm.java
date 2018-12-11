@@ -1,6 +1,7 @@
 package pl.beny.nsai.game.checkers;
 
 
+import pl.beny.nsai.game.checkers.CheckersMan.Type;
 import pl.beny.nsai.util.GamesException;
 
 import java.util.ArrayList;
@@ -24,10 +25,10 @@ public class MinMaxAlgorithm {
     }
 
     public CheckersResult makeMove(CheckersBoard board) {
-        CheckersPossibleMoves m = minMaxStart(board, depth, side, true);
+        CheckersMoves m = minMaxStart(board, depth, side, true);
 
         try {
-            CheckersResult decision = board.move(m.getSource().x, m.getSource().y, m.getPossibleTargets().get(0).x, m.getPossibleTargets().get(0).y, side);
+            CheckersResult decision = board.move(m.getSource().x, m.getSource().y, m.getMoves().get(0).x, m.getMoves().get(0).y, side);
         } catch (GamesException e) {
             e.printStackTrace();
         }
@@ -35,12 +36,12 @@ public class MinMaxAlgorithm {
         return null;
     }
 
-    private CheckersPossibleMoves minMaxStart(CheckersBoard board, int depth, Side side, boolean maximizingPlayer) {
+    private CheckersMoves minMaxStart(CheckersBoard board, int depth, Side side, boolean maximizingPlayer) {
         double alpha = Double.NEGATIVE_INFINITY;
         double beta = Double.POSITIVE_INFINITY;
 
-        List<CheckersPossibleMoves> possibleMoves;
-        possibleMoves = board.getPossibleMoves(side);
+        List<CheckersMoves> possibleMoves;
+        possibleMoves = board.getMoves(side, false);
 
 
         List<Double> heuristics = new ArrayList<>();
@@ -51,7 +52,7 @@ public class MinMaxAlgorithm {
         for (int i = 0; i < possibleMoves.size(); i++) {
             tempBoard = board.copy();
             try {
-                tempBoard.move(possibleMoves.get(i).getSource().x, possibleMoves.get(i).getSource().y, possibleMoves.get(i).getPossibleTargets().get(i).x, possibleMoves.get(i).getPossibleTargets().get(i).y, side);
+                tempBoard.move(possibleMoves.get(i).getSource().x, possibleMoves.get(i).getSource().y, possibleMoves.get(i).getMoves().get(i).x, possibleMoves.get(i).getMoves().get(i).y, side);
             } catch (GamesException e) {
                 e.printStackTrace();
             }
@@ -82,7 +83,7 @@ public class MinMaxAlgorithm {
         if (depth == 0) {
             return getHeuristic(board);
         }
-        List<CheckersPossibleMoves> possibleMoves = board.getPossibleMoves(side);
+        List<CheckersMoves> possibleMoves = board.getMoves(side, false);
 
         double initial = 0;
         CheckersBoard tempBoard = null;
@@ -91,7 +92,7 @@ public class MinMaxAlgorithm {
             for (int i = 0; i < possibleMoves.size(); i++) {
                 tempBoard = board.copy();
                 try {
-                    tempBoard.move(possibleMoves.get(i).getSource().x, possibleMoves.get(i).getSource().y, possibleMoves.get(i).getPossibleTargets().get(i).x, possibleMoves.get(i).getPossibleTargets().get(i).y, side);
+                    tempBoard.move(possibleMoves.get(i).getSource().x, possibleMoves.get(i).getSource().y, possibleMoves.get(i).getMoves().get(i).x, possibleMoves.get(i).getMoves().get(i).y, side);
                 } catch (GamesException e) {
                     e.printStackTrace();
                 }
@@ -109,7 +110,7 @@ public class MinMaxAlgorithm {
             for (int i = 0; i < possibleMoves.size(); i++) {
                 tempBoard = board.copy();
                 try {
-                    tempBoard.move(possibleMoves.get(i).getSource().x, possibleMoves.get(i).getSource().y, possibleMoves.get(i).getPossibleTargets().get(i).x, possibleMoves.get(i).getPossibleTargets().get(i).y, side);
+                    tempBoard.move(possibleMoves.get(i).getSource().x, possibleMoves.get(i).getSource().y, possibleMoves.get(i).getMoves().get(i).x, possibleMoves.get(i).getMoves().get(i).y, side);
                 } catch (GamesException e) {
                     e.printStackTrace();
                 }
@@ -132,9 +133,9 @@ public class MinMaxAlgorithm {
         double pieceWeight = 1;
         double result = 0;
         if (side == Side.WHITE)
-            result = b.getNumWhiteQueenPieces() * queenWeight + b.getNumWhiteNormalPieces() * queenWeight - b.getNumBlackQueenPieces() * queenWeight - b.getNumBlackNormalPieces() * queenWeight;
+            result = getNumWhiteQueenPieces(b) * queenWeight + getNumWhiteNormalPieces(b) * queenWeight - getNumBlackQueenPieces(b) * queenWeight - getNumBlackNormalPieces(b) * queenWeight;
         else
-            result = b.getNumBlackQueenPieces() * queenWeight + b.getNumBlackNormalPieces() * queenWeight - b.getNumWhiteQueenPieces() * queenWeight - b.getNumWhiteNormalPieces() * queenWeight;
+            result = getNumBlackQueenPieces(b) * queenWeight + getNumBlackNormalPieces(b) * queenWeight - getNumWhiteQueenPieces(b) * queenWeight - getNumWhiteNormalPieces(b) * queenWeight;
         return result;
 
     }
@@ -143,5 +144,21 @@ public class MinMaxAlgorithm {
         if (side == Side.BLACK)
             return Side.WHITE;
         return Side.BLACK;
+    }
+
+    private double getNumWhiteQueenPieces(CheckersBoard board) {
+        return board.getCheckers(Side.WHITE, Type.QUEEN).size();
+    }
+
+    private double getNumBlackQueenPieces(CheckersBoard board) {
+        return board.getCheckers(Side.BLACK, Type.QUEEN).size();
+    }
+
+    private double getNumWhiteNormalPieces(CheckersBoard board) {
+        return board.getCheckers(Side.WHITE, Type.MAN).size();
+    }
+
+    private double getNumBlackNormalPieces(CheckersBoard board) {
+        return board.getCheckers(Side.BLACK, Type.MAN).size();
     }
 }

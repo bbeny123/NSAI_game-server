@@ -4,13 +4,12 @@ import pl.beny.nsai.dto.CheckersRequest;
 import pl.beny.nsai.game.Game;
 import pl.beny.nsai.util.GamesException;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static pl.beny.nsai.game.checkers.Checkers.Status.*;
 import static pl.beny.nsai.game.checkers.CheckersMan.Side.BLACK;
 import static pl.beny.nsai.game.checkers.CheckersMan.Side.WHITE;
+import static pl.beny.nsai.game.checkers.CheckersResult.Status.*;
 import static pl.beny.nsai.util.GamesException.GamesErrors.CHECKERS_COMPUTER_TURN;
 
 public class Checkers extends Game {
@@ -20,44 +19,27 @@ public class Checkers extends Game {
         MinMax
     }
 
-    public interface Status {
-        int WHITE_TURN = 0;
-        int WHITE_WON = 1;
-        int BLACK_TURN = 2;
-        int BLACK_WON = 3;
-        int TIE = 4;
-    }
-
-    private LocalDateTime lastActivity = LocalDateTime.now();
-    private Difficulty difficulty = Difficulty.OloAI;
     private CheckersBoard board = new CheckersBoard();
-    private CheckersPossibleMoves forcedCapture;
-    private int status = Status.WHITE_TURN;
+    private Difficulty difficulty = Difficulty.OloAI;
+    private CheckersMoves forcedCapture;
+    private int status = WHITE_TURN;
 
     public CheckersResult move(CheckersRequest request) throws GamesException {
-        if (status == Status.BLACK_TURN) {
+        if (status == BLACK_TURN) {
             throw new GamesException(CHECKERS_COMPUTER_TURN);
         }
-
         if (forcedCapture != null) {
             board.checkForcedCapture(request.getX1(), request.getY1(), request.getX2(), request.getY2(), forcedCapture);
         }
 
-        CheckersResult result = board.move(request.getX1(), request.getY1(), request.getX2(), request.getY2(), WHITE);
-        status = result.getStatus();
-        forcedCapture = result.getForceToCapture();
-
-        endTurn();
-        result.setStatus(status);
-
-        return result;
+        return endTurn(board.move(request.getX1(), request.getY1(), request.getX2(), request.getY2(), WHITE));
     }
 
     @Override
     public List<Object> moveAI() throws GamesException {
         List<Object> results = new ArrayList<>();
 
-        for (int i = 0; i < 1000 && status == Status.BLACK_TURN ; i++) {
+        for (int i = 0; i < 1000 && status == BLACK_TURN ; i++) {
             CheckersResult result = null;
 
             if (difficulty == Difficulty.OloAI) {
@@ -66,21 +48,16 @@ public class Checkers extends Game {
                 result = new MinMaxAlgorithm(BLACK).makeMove(board);
             }
 
-            status = result.getStatus();
-            forcedCapture = result.getForceToCapture();
-            result.setForceToCapture(null);
-
-            endTurn();
-            result.setStatus(status);
-
-            results.add(result);
+            results.add(endTurn(result));
         }
 
         return results;
     }
 
+    private CheckersResult endTurn(CheckersResult result) {
+        forcedCapture = result.getForceToCapture();
+        status = result.getStatus();
 
-    private void endTurn() {
         boolean whiteMoves = board.moveOrCapturePossible(WHITE);
         boolean blackMoves = board.moveOrCapturePossible(BLACK);
 
@@ -95,6 +72,9 @@ public class Checkers extends Game {
         } else if (status == BLACK_TURN && !blackMoves) {
             status = WHITE_TURN;
         }
+
+        result.setStatus(status);
+        return result;
     }
 
     @Override

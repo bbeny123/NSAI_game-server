@@ -49,12 +49,12 @@ public class CheckersMan {
         return this.type == QUEEN || this.side == BLACK;
     }
 
-    public void move(CheckersMan target) {
-        if (target.y == 0 || target.y == 7) {
+    public void move(int x, int y) {
+        if (y == 0 || y == 7) {
             this.type = QUEEN;
         }
-        this.x = target.x;
-        this.y = target.y;
+        this.x = x;
+        this.y = y;
     }
 
     public CheckersMan copy() {
