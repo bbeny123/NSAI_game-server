@@ -17,7 +17,8 @@ import static pl.beny.nsai.util.GamesException.GamesErrors.*;
 public class Battleship extends Game {
 
     public enum Difficulty {
-        OloAI
+        OloAI,
+        MediumAI
     }
 
     private int STATUS = BattleshipStatus.PREPARING;
@@ -25,6 +26,8 @@ public class Battleship extends Game {
     private Difficulty difficulty = Difficulty.OloAI;
     private final BattleshipPlayer player = new BattleshipPlayer();
     private final BattleshipPlayer computer = new BattleshipPlayer();
+
+    private final BattleshipMediumAI mediumAI = new BattleshipMediumAI();
 
     @Override
     public void newGameAsync() {
@@ -52,7 +55,7 @@ public class Battleship extends Game {
     }
 
     private void placeShipsAI() throws GamesException {
-        if (difficulty == Difficulty.OloAI) {
+        if (difficulty == Difficulty.OloAI || difficulty == Difficulty.MediumAI) {
             BattleshipOloAI.placeShips(computer.getShips(), computer.getBoard());
         }
 
@@ -79,6 +82,9 @@ public class Battleship extends Game {
 
         if (difficulty == Difficulty.OloAI) {
             response = BattleshipOloAI.fire(player.getBoard());
+        }
+        if (difficulty == Difficulty.MediumAI) {
+            response = mediumAI.fire(player.getBoard());
         }
 
         if (response.getEnemyStatus() > 0 && player.getShips().destroyShip() <= 0) {

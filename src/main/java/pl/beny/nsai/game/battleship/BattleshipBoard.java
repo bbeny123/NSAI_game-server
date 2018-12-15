@@ -15,7 +15,7 @@ public class BattleshipBoard {
         int FIRED = 3;
     }
 
-    private interface FireStatus {
+    public interface FireStatus {
         int MISS = 0;
         int HIT = -1;
     }

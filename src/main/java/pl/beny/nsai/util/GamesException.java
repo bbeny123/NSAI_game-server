@@ -50,6 +50,10 @@ public class GamesException extends RuntimeException {
             this.message = message;
             this.httpStatus = httpStatus;
         }
+
+        public int getCode() {
+            return code;
+        }
     }
 
     private final GamesErrors error;
