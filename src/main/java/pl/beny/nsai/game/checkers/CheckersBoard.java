@@ -42,7 +42,7 @@ public class CheckersBoard {
     private CheckersBoard(CheckersMan[][] board) {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                if (board(x, y) != null) {
+                if (board[x][y] != null) {
                     this.board[x][y] = board[x][y].copy();
                 }
             }
