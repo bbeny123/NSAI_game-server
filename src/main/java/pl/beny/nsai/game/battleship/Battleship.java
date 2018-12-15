@@ -18,7 +18,8 @@ public class Battleship extends Game {
 
     public enum Difficulty {
         OloAI,
-        MediumAI
+        MediumAI,
+        HardAI
     }
 
     private int STATUS = BattleshipStatus.PREPARING;
@@ -28,6 +29,8 @@ public class Battleship extends Game {
     private final BattleshipPlayer computer = new BattleshipPlayer();
 
     private final BattleshipMediumAI mediumAI = new BattleshipMediumAI();
+
+    private final BattleshipHardAI hardAI = new BattleshipHardAI();
 
     @Override
     public void newGameAsync() {
@@ -55,7 +58,7 @@ public class Battleship extends Game {
     }
 
     private void placeShipsAI() throws GamesException {
-        if (difficulty == Difficulty.OloAI || difficulty == Difficulty.MediumAI) {
+        if (difficulty == Difficulty.OloAI || difficulty == Difficulty.MediumAI || difficulty == Difficulty.HardAI) {
             BattleshipOloAI.placeShips(computer.getShips(), computer.getBoard());
         }
 
@@ -85,6 +88,9 @@ public class Battleship extends Game {
         }
         if (difficulty == Difficulty.MediumAI) {
             response = mediumAI.fire(player.getBoard());
+        }
+        if (difficulty == Difficulty.HardAI) {
+            response = hardAI.fire(player.getBoard());
         }
 
         if (response.getEnemyStatus() > 0 && player.getShips().destroyShip() <= 0) {

@@ -2,11 +2,16 @@ package pl.beny.nsai.game.battleship;
 
 import pl.beny.nsai.util.GamesException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static pl.beny.nsai.util.GamesException.GamesErrors.*;
 
 public class BattleshipBoard {
 
     public final static int BOARD_SIZE = 10;
+
+    private List<Integer> availableShips = new ArrayList<>();
 
     public interface BoardStatus {
         int NOTHING = 0;
@@ -22,7 +27,7 @@ public class BattleshipBoard {
 
     private int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
 
-    private int board(int x, int y) {
+    public int board(int x, int y) {
         return board[y][x];
     }
 
@@ -33,12 +38,15 @@ public class BattleshipBoard {
     public void placeShip(int x1, int y1, int x2, int y2) throws GamesException {
         inBoard(x1, y1, x2, y2);
         placeAvailable(x1, y1, x2, y2);
+        int size = 0;
 
         for (int x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
             for (int y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) {
                 board(x, y, BoardStatus.SHIP);
+                size++;
             }
         }
+        availableShips.add(size);
     }
 
     public int fire(int x, int y) throws GamesException {
@@ -53,6 +61,10 @@ public class BattleshipBoard {
         }
     }
 
+    public List<Integer> getAvailableShips() {
+        return availableShips;
+    }
+
     private void placeAvailable(int x1, int y1, int x2, int y2) throws GamesException {
         for (int x = rangeFrom(x1, x2); x <= rangeTo(x1, x2); x++) {
             for (int y = rangeFrom(y1, y2); y <= rangeTo(y1, y2); y++) {
@@ -61,6 +73,22 @@ public class BattleshipBoard {
                 }
             }
         }
+    }
+
+    public boolean placeAvailableForMap(int criteria, int x, int y, int size, boolean vertical) {
+        int z = (vertical ? y : x);
+        int end = z + size - 1;
+        if (end > BOARD_SIZE - 1) {
+            return false;
+        }
+        int status;
+        for (int i = z; i <= end; i++) {
+            status = (vertical ? board[x][i] : board[i][y]);
+            if (status == criteria) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void inBoard(int x1, int y1, int x2, int y2) throws GamesException {
