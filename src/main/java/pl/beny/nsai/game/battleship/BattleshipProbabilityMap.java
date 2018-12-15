@@ -120,19 +120,36 @@ public class BattleshipProbabilityMap {
     }
 
     private List<Coordinate> getAdjacentPosition(Coordinate coordinate) {
+
+        for (Coordinate coord : hits) {
+            if (coord.X == coordinate.X && coord.Y != coordinate.Y && (coord.Y - coordinate.Y) < 4) {
+                findPossibleShipPlacementsByY(coordinate);
+            } else if (coord.Y == coordinate.Y && coord.X != coordinate.X && (coord.X - coordinate.X) < 4) {
+                findPossibleShipPlacementsByX(coordinate);
+            } else {
+                findPossibleShipPlacementsByX(coordinate);
+                findPossibleShipPlacementsByY(coordinate);
+            }
+        }
+        return adj;
+    }
+
+    private void findPossibleShipPlacementsByY(Coordinate coordinate) {
         if (coordinate.getY() + 1 < BattleshipBoard.BOARD_SIZE) {
             adj.add(new Coordinate(coordinate.getX(), coordinate.getY() + 1));
         }
         if (coordinate.getY() - 1 >= 0) {
             adj.add(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
         }
+    }
+
+    private void findPossibleShipPlacementsByX(Coordinate coordinate) {
         if (coordinate.getX() + 1 < BattleshipBoard.BOARD_SIZE) {
             adj.add(new Coordinate(coordinate.getX() + 1, coordinate.getY()));
         }
         if (coordinate.getX() - 1 >= 0) {
             adj.add(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
         }
-        return adj;
     }
 
     private void increaseProbablity(int x, int y, int shipSize, boolean vertical) {
