@@ -50,7 +50,16 @@ public class CheckersBoard {
     }
 
     public CheckersBoard copy() {
-        return new CheckersBoard(this.board);
+        CheckersBoard newBoard = new CheckersBoard();
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                if (board(x, y) != null) {
+                    newBoard.board[x][y] = this.board[x][y].copy();
+                }
+            }
+        }
+
+        return newBoard;
     }
 
     private CheckersMan board(int x, int y) {
