@@ -60,4 +60,14 @@ public class CheckersMan {
     public CheckersMan copy() {
         return new CheckersMan(this.x, this.y, this.side, this.type);
     }
+
+    @Override
+    public String toString() {
+        return "CheckersMan{" +
+                "x=" + x +
+                ", y=" + y +
+                ", side=" + side +
+                ", type=" + type +
+                '}';
+    }
 }

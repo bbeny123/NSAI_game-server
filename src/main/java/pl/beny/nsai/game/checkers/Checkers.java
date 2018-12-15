@@ -39,14 +39,16 @@ public class Checkers extends Game {
     public List<Object> moveAI() throws GamesException {
         List<Object> results = new ArrayList<>();
 
-        for (int i = 0; i < 1000 && status == BLACK_TURN ; i++) {
+        for (int i = 0; i < 1000 && status == BLACK_TURN; i++) {
             CheckersResult result = null;
 
             if (difficulty == Difficulty.OloAI) {
                 result = CheckersOloAI.moveAI(board, forcedCapture);
             } else if (difficulty == Difficulty.MinMax) {
-                result = new MinMaxAlgorithm(BLACK).makeMove(board);
+                result = new MinMaxAlgorithm(BLACK).makeMove(board, forcedCapture);
             }
+
+            //result = new MinMaxAlgorithm(BLACK).makeMove(board, forcedCapture);
 
             results.add(endTurn(result));
         }
