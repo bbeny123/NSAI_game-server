@@ -30,6 +30,7 @@ public class BattleshipMediumAI {
                 int x = new Random().nextInt(BattleshipBoard.BOARD_SIZE);
                 int y = new Random().nextInt(BattleshipBoard.BOARD_SIZE);
                 if (fireStatus > 0) {
+                    board.markAsMissAroundSunkShip(accurateHitX, accurateHitY, fireStatus);
                     resetStrategy();
                 }
                 if (!underFire) {
