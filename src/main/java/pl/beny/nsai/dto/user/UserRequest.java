@@ -6,12 +6,13 @@ import pl.beny.nsai.model.User;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+//user registration request
 public class UserRequest {
 
-    private String email;
-    private String password;
-    private String name;
-    private String captchaResponse;
+    private String email;               //user email
+    private String password;            //user password
+    private String name;                //user name
+    private String captchaResponse;     //registration captcha widget result
 
     @NotEmpty
     @Email

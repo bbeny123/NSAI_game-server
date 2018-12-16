@@ -2,8 +2,10 @@ package pl.beny.nsai.game.checkers;
 
 import static pl.beny.nsai.game.checkers.CheckersResult.Status.WHITE_TURN;
 
+//abstract representation of move result
 public class CheckersResult {
 
+    //possible game statuses
     public interface Status {
         int WHITE_TURN = 0;
         int WHITE_WON = 1;
@@ -12,11 +14,11 @@ public class CheckersResult {
         int TIE = 4;
     }
 
-    private CheckersMan source;
-    private CheckersMan target;
-    private CheckersMan captured;
-    private CheckersMoves forceToCapture;
-    private int status = WHITE_TURN;
+    private CheckersMan source;             //move source CheckersMan
+    private CheckersMan target;             //move target CheckersMan
+    private CheckersMan captured;           //captured CheckersMan
+    private CheckersMoves forceToCapture;   //forced moves
+    private int status = WHITE_TURN;        //game status
 
     public CheckersMan getSource() {
         return source;

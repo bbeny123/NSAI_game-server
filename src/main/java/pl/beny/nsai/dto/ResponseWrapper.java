@@ -1,9 +1,10 @@
 package pl.beny.nsai.dto;
 
+//required to proper working of AI listener
 public class ResponseWrapper {
 
-    private Long userId;
-    private Object response;
+    private Long userId;        //userId
+    private Object response;    //AI result
 
     public ResponseWrapper(Long userId, Object response) {
         this.userId = userId;

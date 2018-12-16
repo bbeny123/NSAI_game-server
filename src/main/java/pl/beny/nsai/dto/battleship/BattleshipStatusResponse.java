@@ -13,7 +13,7 @@ public class BattleshipStatusResponse {
         this.gameStatus = gameStatus;
     }
 
-    protected Integer gameStatus;
+    protected Integer gameStatus;   //indicates phase of the game (values:  BattleshipStatus)
 
     public Integer getGameStatus() {
         return gameStatus;

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 public class BattleshipFireRequest {
 
+    //fire coordinates
     private Integer x;
     private Integer y;
 

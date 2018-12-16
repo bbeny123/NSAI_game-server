@@ -5,7 +5,7 @@ import pl.beny.nsai.util.GamesException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static pl.beny.nsai.dto.battleship.BattleshipFireResponse.BattleshipFireTurn.PLAYER_TURN;
 
@@ -50,7 +50,7 @@ public class BattleshipHardAI {
     }
 
     private int getRandomCoords(int size) {
-        return new Random().nextInt(size - 1);
+        return ThreadLocalRandom.current().nextInt(size - 1);
     }
 
     private List<Coordinate> findBestPosition(int[][] probabilities) {

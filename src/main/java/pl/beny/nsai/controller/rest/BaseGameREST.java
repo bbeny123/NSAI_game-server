@@ -35,6 +35,7 @@ public abstract class BaseGameREST<T extends Game> extends BaseREST {
         this.sink = processor.sink();
     }
 
+    //new game for requested user
     @PostMapping("/new")
     public ResponseEntity<?> newGame(@Valid @RequestBody GameRequest request) throws Exception {
         T game = clz.newInstance();
@@ -44,15 +45,18 @@ public abstract class BaseGameREST<T extends Game> extends BaseREST {
         return ok();
     }
 
+    //AI listener for the user with given {id}
     @GetMapping(path = "/ai/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Object> aiResponse(@PathVariable("id") Long id) {
         return processor.filter(r -> r.getUserId().equals(id)).delayElements(Duration.ofMillis(300)).map(ResponseWrapper::getResponse);
     }
 
+    //call AI move for given game
     protected void moveAi(Game game) {
         gamesHolder.moveAI(sink, getUserContext().getUserId(), game);
     }
 
+    //get game for requested user
     protected T getGame() {
         Game game = gamesHolder.get(getUserContext().getUserId());
         if (!clz.isInstance(game)) {

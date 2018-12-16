@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+//games cache (one per player)
 @Component
 public class GamesHolder extends LinkedHashMap<Long, Game> {
 
@@ -19,6 +20,7 @@ public class GamesHolder extends LinkedHashMap<Long, Game> {
         super(16, 0.75f, true);
     }
 
+    //update player last activity when getting his game
     @Override
     public Game get(Object key) {
         Game game = super.get(key);
@@ -28,6 +30,7 @@ public class GamesHolder extends LinkedHashMap<Long, Game> {
         return game;
     }
 
+    //update player last activity when getting his game
     @Override
     public Game getOrDefault(Object key, Game defaultValue) {
         Game game = super.getOrDefault(key, defaultValue);
@@ -37,11 +40,13 @@ public class GamesHolder extends LinkedHashMap<Long, Game> {
         return game;
     }
 
+    //if last activity of any game is older then 1 hour remove the oldest one after adding new game to the cache
     @Override
     protected boolean removeEldestEntry(Map.Entry<Long, Game> eldest) {
         return LocalDateTime.now().minusHours(1).isAfter(eldest.getValue().lastActivity());
     }
 
+    //call asynchronously newGameAsync() method of given game
     @Async
     public void newGameAsync(Game game) {
         if (game != null) {
@@ -49,6 +54,7 @@ public class GamesHolder extends LinkedHashMap<Long, Game> {
         }
     }
 
+    //call asynchronously moveAI() method of given game and emit result of it
     @Async
     public void moveAI(FluxSink<ResponseWrapper> sink, Long userId, Game game) {
         if (game != null) {

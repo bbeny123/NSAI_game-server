@@ -4,10 +4,13 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+//checkers move request
 public class CheckersRequest {
 
+    //source checker coordinates
     private Integer x1;
     private Integer y1;
+    //target checker coordinates
     private Integer x2;
     private Integer y2;
 
