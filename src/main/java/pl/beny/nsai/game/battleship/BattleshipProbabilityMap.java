@@ -28,7 +28,6 @@ public class BattleshipProbabilityMap {
             }
         }
         recalculateProbabilities();
-        showProb();
     }
 
     public int[][] getProbabilities() {
@@ -189,17 +188,6 @@ public class BattleshipProbabilityMap {
             }
         }
         return board;
-    }
-
-    private void showProb() {
-        for (int i = 0; i < BattleshipBoard.BOARD_SIZE; i++) {
-            for (int j = 0; j < BattleshipBoard.BOARD_SIZE; j++) {
-                System.out.print(probabilities[j][i] + "\t");
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-        System.out.print("\n");
     }
 
     static class Coordinate {

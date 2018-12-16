@@ -65,6 +65,10 @@ public class BattleshipBoard {
         return availableShips;
     }
 
+    public void updateAvailableShipList(int shipSize) {
+        availableShips.remove(Integer.valueOf(shipSize));
+    }
+
     private void placeAvailable(int x1, int y1, int x2, int y2) throws GamesException {
         for (int x = rangeFrom(x1, x2); x <= rangeTo(x1, x2); x++) {
             for (int y = rangeFrom(y1, y2); y <= rangeTo(y1, y2); y++) {

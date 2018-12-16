@@ -38,8 +38,11 @@ public class BattleshipHardAI {
             } else {
                 coord = bestCoords.get(0);
             }
-            System.out.println(coord);
+
             fireStatus = board.fire(coord.getX(), coord.getY());
+            if (fireStatus > 0) {
+                board.updateAvailableShipList(fireStatus);
+            }
             return new BattleshipFireResponse(coord.getX(), coord.getY(), fireStatus, PLAYER_TURN);
         } throw new GamesException(GamesException.GamesErrors.AI_ERROR);
     }
@@ -70,7 +73,7 @@ public class BattleshipHardAI {
                 }
             }
         }
-        System.out.println("BEST PROB: " + bestProb);
+
         bestCoords.clear();
         for (int x = 0; x < BattleshipBoard.BOARD_SIZE; x++) {
             for (int y = 0; y < BattleshipBoard.BOARD_SIZE; y++) {
