@@ -2,8 +2,8 @@ package pl.beny.nsai.game.battleship;
 
 public class BattleshipPlayer {
 
-    private BattleshipShips ships = new BattleshipShips();
-    private BattleshipBoard board = new BattleshipBoard();
+    private BattleshipShips ships = new BattleshipShips();  //instance of BattleshipShips
+    private BattleshipBoard board = new BattleshipBoard();  //instance of BattleshipBoard
 
     public BattleshipShips getShips() {
         return ships;

@@ -23,6 +23,7 @@ public class CheckersREST extends BaseGameREST<Checkers> {
         super(gamesHolder, Checkers.class);
     }
 
+    //move checker based on request in requested user game
     @PostMapping("/move")
     public Mono<CheckersResult> move(@Valid @RequestBody CheckersRequest request) throws GamesException {
         Checkers game = getGame();
@@ -30,4 +31,5 @@ public class CheckersREST extends BaseGameREST<Checkers> {
         moveAi(game);
         return Mono.just(result);
     }
+
 }

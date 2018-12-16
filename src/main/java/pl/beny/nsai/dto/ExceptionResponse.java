@@ -6,8 +6,8 @@ import pl.beny.nsai.util.GamesException;
 
 public class ExceptionResponse {
 
-    private String message;
-    private int code = HttpStatus.INTERNAL_SERVER_ERROR.value();
+    private String message;                                         //exception message
+    private int code = HttpStatus.INTERNAL_SERVER_ERROR.value();    //exception code
 
     public ExceptionResponse() {
     }

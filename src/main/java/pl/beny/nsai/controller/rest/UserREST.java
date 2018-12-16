@@ -24,6 +24,7 @@ public class UserREST extends BaseREST {
         this.tokenService = tokenService;
     }
 
+    //register user based on userRequest
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserRequest userRequest) throws RuntimeException {
         CaptchaUtil.verifyCaptcha(userRequest.getCaptchaResponse());
@@ -31,12 +32,14 @@ public class UserREST extends BaseREST {
         return ok();
     }
 
+    //activate user based on token
     @GetMapping("/register/activate")
     public ResponseEntity<?> activate(@RequestParam("token") String token) throws RuntimeException {
         userService.activate(tokenService.findByToken(token).getUser());
         return ok();
     }
 
+    //resend email with token based on resendRequest
     @PostMapping("/register/resend")
     public ResponseEntity<?> resendToken(@Valid @RequestBody ResendRequest resendRequest) throws RuntimeException {
         userService.resendToken(userService.findByEmail(resendRequest.getEmail()));

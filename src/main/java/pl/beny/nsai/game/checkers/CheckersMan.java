@@ -5,8 +5,10 @@ import static pl.beny.nsai.game.checkers.CheckersMan.Side.WHITE;
 import static pl.beny.nsai.game.checkers.CheckersMan.Type.MAN;
 import static pl.beny.nsai.game.checkers.CheckersMan.Type.QUEEN;
 
+//contains CheckersMan data
 public class CheckersMan {
 
+    //checker type
     public enum Type {
         MAN,
         QUEEN,
@@ -16,6 +18,7 @@ public class CheckersMan {
         }
     }
 
+    //checker side
     public enum Side {
         WHITE,
         BLACK;
@@ -24,10 +27,10 @@ public class CheckersMan {
         }
     }
 
-    public int x;
-    public int y;
-    public Side side = WHITE;
-    public Type type = MAN;
+    public int x;               //checker x position
+    public int y;               //checker y position
+    public Side side = WHITE;   //checker side
+    public Type type = MAN;     //checker type
 
     public CheckersMan(int x, int y) {
         this.x = x;
@@ -41,14 +44,17 @@ public class CheckersMan {
         this.type = type;
     }
 
+    //indicates if checker is white or queen
     public boolean whiteOrQueen() {
         return this.type == QUEEN || this.side == WHITE;
     }
 
+    //indicates if checker is black or queen
     public boolean blackOrQueen() {
         return this.type == QUEEN || this.side == BLACK;
     }
 
+    //change checker position to given x,y
     public void move(int x, int y) {
         if (y == 0 || y == 7) {
             this.type = QUEEN;
@@ -57,6 +63,7 @@ public class CheckersMan {
         this.y = y;
     }
 
+    //get copy of this checker
     public CheckersMan copy() {
         return new CheckersMan(this.x, this.y, this.side, this.type);
     }

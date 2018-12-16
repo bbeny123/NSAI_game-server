@@ -11,8 +11,10 @@ import static pl.beny.nsai.util.GamesException.GamesErrors.BATTLESHIP_DIAGONAL;
 
 public class BattleshipPlaceRequest {
 
+    //ship coordinates start
     private Integer x1;
     private Integer y1;
+    //ship coordinates end
     private Integer x2;
     private Integer y2;
 

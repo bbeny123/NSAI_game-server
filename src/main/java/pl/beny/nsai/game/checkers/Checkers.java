@@ -12,29 +12,33 @@ import static pl.beny.nsai.game.checkers.CheckersMan.Side.WHITE;
 import static pl.beny.nsai.game.checkers.CheckersResult.Status.*;
 import static pl.beny.nsai.util.GamesException.GamesErrors.CHECKERS_COMPUTER_TURN;
 
+//main Checkers class
 public class Checkers extends Game {
 
+    //available game difficulties
     public enum Difficulty {
         OloAI,
         MinMax
     }
 
-    private CheckersBoard board = new CheckersBoard();
-    private Difficulty difficulty = Difficulty.OloAI;
-    private CheckersMoves forcedCapture;
-    private int status = WHITE_TURN;
+    private CheckersBoard board = new CheckersBoard();  //instance of checkers board
+    private Difficulty difficulty = Difficulty.OloAI;   //game difficulty (values: Difficulty)
+    private CheckersMoves forcedCapture;                //contains data of forced move
+    private int status = WHITE_TURN;                    //indicates game status (values: pl.beny.nsai.game.checkers.CheckersResult.Status)
 
+    //validates and executes player moveRequest
     public CheckersResult move(CheckersRequest request) throws GamesException {
-        if (status == BLACK_TURN) {
+        if (status == BLACK_TURN) {                             //check if it is player turn
             throw new GamesException(CHECKERS_COMPUTER_TURN);
         }
-        if (forcedCapture != null) {
+        if (forcedCapture != null) {                            //check if requested move is equals to one of the forced move (if move is forced)
             board.checkForcedCapture(request.getX1(), request.getY1(), request.getX2(), request.getY2(), forcedCapture);
         }
 
         return endTurn(board.move(request.getX1(), request.getY1(), request.getX2(), request.getY2(), WHITE));
     }
 
+    //AI move (dependent on difficulty)
     @Override
     public List<Object> moveAI() throws GamesException {
         List<Object> results = new ArrayList<>();
@@ -48,14 +52,13 @@ public class Checkers extends Game {
                 result = new MinMaxAlgorithm(BLACK).makeMove(board, forcedCapture);
             }
 
-            //result = new MinMaxAlgorithm(BLACK).makeMove(board, forcedCapture);
-
             results.add(endTurn(result));
         }
 
         return results;
     }
 
+    //sets and returns status on end of the turn
     private CheckersResult endTurn(CheckersResult result) {
         forcedCapture = result.getForceToCapture();
         status = result.getStatus();
@@ -79,6 +82,7 @@ public class Checkers extends Game {
         return result;
     }
 
+    //set difficulty
     @Override
     public void setDifficulty(String difficultyLevel) {
         this.difficulty = Difficulty.valueOf(difficultyLevel);

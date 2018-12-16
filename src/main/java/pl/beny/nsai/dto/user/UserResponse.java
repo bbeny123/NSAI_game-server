@@ -4,11 +4,11 @@ import pl.beny.nsai.model.User;
 
 public class UserResponse {
 
-    private Long id;
-    private String email;
-    private String name;
-    private String type;
-    private boolean active;
+    private Long id;            //user id
+    private String email;       //user email
+    private String name;        //user name
+    private String type;        //user type (values: pl.beny.nsai.model.User.Type)
+    private boolean active;     //indicates if user is active
 
     public UserResponse(User user) {
         this.id = user.getId();

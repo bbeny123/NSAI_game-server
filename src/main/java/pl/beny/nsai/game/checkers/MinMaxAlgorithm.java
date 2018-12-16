@@ -7,7 +7,6 @@ import pl.beny.nsai.util.GamesException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static pl.beny.nsai.game.checkers.CheckersMan.Side;
@@ -68,7 +67,7 @@ public class MinMaxAlgorithm {
 //        }
 //
 //        if (!moves.isEmpty()) {
-//            move = moves.get(new Random().nextInt(moves.size()));
+//            move = moves.get(ThreadLocalRandom.current().nextInt(moves.size()));
 //            CheckersMan target = move.getMoves().get(ThreadLocalRandom.current().nextInt(move.getMoves().size()));
 //            CheckersMan source = move.getSource();
 //
@@ -104,7 +103,6 @@ public class MinMaxAlgorithm {
 
         double maxHeuristics = Double.NEGATIVE_INFINITY;
 
-        Random rand = new Random();
         for (int i = heuristics.size() - 1; i >= 0; i--) {
             if (heuristics.get(i) >= maxHeuristics) {
                 maxHeuristics = heuristics.get(i);
@@ -124,7 +122,7 @@ public class MinMaxAlgorithm {
 
         CheckersResult checkersResult = new CheckersResult();
 
-        CheckersMoves move = possibleMoves.get(rand.nextInt(possibleMoves.size()));
+        CheckersMoves move = possibleMoves.get(ThreadLocalRandom.current().nextInt(possibleMoves.size()));
 
         CheckersMan target = move.getMoves().get(0);
         CheckersMan source = move.getSource();

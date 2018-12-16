@@ -26,12 +26,14 @@ public class BattleshipREST extends BaseGameREST<Battleship> {
         super(gamesHolder, Battleship.class);
     }
 
+    //place ship based on placeRequest in requested user game
     @PostMapping("/place")
     public Mono<BattleshipStatusResponse> placeShip(@Valid @RequestBody BattleshipPlaceRequest placeRequest) throws Exception {
         placeRequest.isValid();
         return Mono.just(getGame().placeShip(placeRequest));
     }
 
+    //fire move based on fireRequest in requested user game
     @PostMapping("/fire")
     public Mono<BattleshipFireResponse> fire(@Valid @RequestBody BattleshipFireRequest fireRequest) throws GamesException {
         Game game = getGame();

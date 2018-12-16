@@ -7,11 +7,11 @@ public class BattleshipFireResponse extends BattleshipStatusResponse {
         int COMPUTER_TURN = 1;
     }
 
-    private Integer x;
-    private Integer y;
-    private Integer playerStatus;
-    private Integer enemyStatus;
-    private Integer fireTurn;
+    private Integer x;              //AI fire coordinates
+    private Integer y;              //AI fire coordinates
+    private Integer playerStatus;   //indicates result of player move (values: pl.beny.nsai.game.battleship.BattleshipBoard.BoardStatus)
+    private Integer enemyStatus;    //indicates result of AI move (values: pl.beny.nsai.game.battleship.BattleshipBoard.BoardStatus)
+    private Integer fireTurn;       //indicates whose is the fire turn (values: BattleshipFireTurn)
 
     public BattleshipFireResponse(Integer x, Integer y, Integer enemyStatus, Integer fireTurn) {
         super(BattleshipStatus.BATTLE);

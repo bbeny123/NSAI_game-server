@@ -4,7 +4,7 @@ import pl.beny.nsai.dto.battleship.BattleshipFireResponse;
 import pl.beny.nsai.util.GamesException;
 import pl.beny.nsai.util.GamesException.GamesErrors;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static pl.beny.nsai.dto.battleship.BattleshipFireResponse.BattleshipFireTurn.PLAYER_TURN;
 
@@ -27,8 +27,8 @@ public class BattleshipMediumAI {
     public BattleshipFireResponse fire(BattleshipBoard board) {
         for (int i = 0; i < 1000; i++) {
             try {
-                int x = new Random().nextInt(BattleshipBoard.BOARD_SIZE);
-                int y = new Random().nextInt(BattleshipBoard.BOARD_SIZE);
+                int x = ThreadLocalRandom.current().nextInt(BattleshipBoard.BOARD_SIZE);
+                int y = ThreadLocalRandom.current().nextInt(BattleshipBoard.BOARD_SIZE);
                 if (fireStatus > 0) {
                     resetStrategy();
                 }
