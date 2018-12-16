@@ -69,70 +69,47 @@ public class BattleshipBoard {
         availableShips.remove(Integer.valueOf(shipSize));
     }
 
-    public void markAsMissAroundSunkShip(int x1, int y1, int shipSize) {
-        boolean vertical = checkIfVertical(x1, y1);
-        int x2 = 0;
-        int y2 = 0;
-        if (shipSize > 1) {
-            if (vertical) {
-                /*if (board(x1 + 1, y1) == 2) {
-                    y2 = y1;
-                    x2 = x1 + shipSize - 1;
-                } else if (board(x1 - 1, y1) == 2) {
-                    y2 = y1;
-                    x2 = x1 - shipSize + 1;
-                }*/
-                if (board(x1, y1 + 1) == 2) {
-                    x2 = x1;
-                    y2 = y1 + shipSize - 1;
-                } else if (board(x1, y1 - 1) == 2) {
-                    x2 = x1;
-                    y2 = y1 - shipSize + 1;
-                }
-            } else {
-                /*if (board(x1, y1 + 1) == 2) {
-                    x2 = x1;
-                    y2 = y1 + shipSize - 1;
-                } else if (board(x1, y1 - 1) == 2) {
-                    x2 = x1;
-                    y2 = y1 - shipSize + 1;
-                }*/
-                if (board(x1 + 1, y1) == 2) {
-                    y2 = y1;
-                    x2 = x1 + shipSize - 1;
-                } else if (board(x1 - 1, y1) == 2) {
-                    y2 = y1;
-                    x2 = x1 - shipSize + 1;
-                }
-            }
-        } else {
-            x2 = x1;
-            y2 = y1;
-        }
+    public void markAsMissAroundSunkShip(int x1, int y1) {
 
-        for (int x = rangeFrom(x1, x2); x <= rangeTo(x1, x2); x++) {
-            for (int y = rangeFrom(y1, y2); y <= rangeTo(y1, y2); y++) {
-                if (board(x, y) == BoardStatus.NOTHING) {
-                    board(x, y, BoardStatus.FIRED);
+        for (int i = x1 - 1; i >= 0; i--) {
+            for (int x = rangeFrom(x1, i); x <= rangeTo(x1, i); x++) {
+                for (int y = rangeFrom(y1, i); y <= rangeTo(y1, i); y++) {
+                    if (board(x, y) == BoardStatus.NOTHING) {
+                        board(x, y, BoardStatus.FIRED);
+                    }
                 }
             }
         }
-    }
 
-    private boolean checkIfVertical(int x, int y) {
-        if (board(x, y) == board(x, y + 1) && board(x, y + 1) == 2 && (y + 1) < (BOARD_SIZE - 1)) {
-            return true;
+        for (int i = x1 + 1; i < BOARD_SIZE; i++) {
+            for (int x = rangeFrom(x1, i); x <= rangeTo(x1, i); x++) {
+                for (int y = rangeFrom(y1, i); y <= rangeTo(y1, i); y++) {
+                    if (board(x, y) == BoardStatus.NOTHING) {
+                        board(x, y, BoardStatus.FIRED);
+                    }
+                }
+            }
         }
-        if (board(x, y) == board(x, y - 1) && board(x, y - 1) == 2 && (y - 1) >= 0) {
-            return true;
+
+        for (int i = y1 - 1; i >= 0; i--) {
+            for (int x = rangeFrom(x1, i); x <= rangeTo(x1, i); x++) {
+                for (int y = rangeFrom(y1, i); y <= rangeTo(y1, i); y++) {
+                    if (board(x, y) == BoardStatus.NOTHING) {
+                        board(x, y, BoardStatus.FIRED);
+                    }
+                }
+            }
         }
-        if (board(x, y) == board(x + 1, y) && board(x + 1, y) == 2 && (x + 1) < (BOARD_SIZE - 1)) {
-            return false;
+
+        for (int i = y1 + 1; i < BOARD_SIZE; i++) {
+            for (int x = rangeFrom(x1, i); x <= rangeTo(x1, i); x++) {
+                for (int y = rangeFrom(y1, i); y <= rangeTo(y1, i); y++) {
+                    if (board(x, y) == BoardStatus.NOTHING) {
+                        board(x, y, BoardStatus.FIRED);
+                    }
+                }
+            }
         }
-        if (board(x, y) == board(x - 1, y) && board(x - 1, y) == 2 && (x - 1) >= 0) {
-            return false;
-        }
-        return false;
     }
 
     private void placeAvailable(int x1, int y1, int x2, int y2) throws GamesException {

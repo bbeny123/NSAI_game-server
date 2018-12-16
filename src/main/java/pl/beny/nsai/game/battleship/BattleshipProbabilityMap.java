@@ -41,6 +41,7 @@ public class BattleshipProbabilityMap {
     private void recalculateProbabilities() {
         board = new int[BattleshipBoard.BOARD_SIZE][BattleshipBoard.BOARD_SIZE];
         board = loadBoard();
+
         // przepisanie aktualnej planszy
         for (int y = 0; y < BattleshipBoard.BOARD_SIZE; y++) {
             for (int x = 0; x < BattleshipBoard.BOARD_SIZE; x++) {
@@ -75,11 +76,6 @@ public class BattleshipProbabilityMap {
     private void adaptToCurrentBoard() {
         for (int y = 0; y < BattleshipBoard.BOARD_SIZE; y++) {
             for (int x = 0; x < BattleshipBoard.BOARD_SIZE; x++) {
-                /*if (board[x][y] == 2 || board[x][y] == 3) {
-                    if (probabilities[x][y] != 0) {
-                        probabilities[x][y] = 0;
-                    }
-                }*/
                 if (board[y][x] == 2 || board[y][x] == 3) {
                     if (probabilities[y][x] != 0) {
                         probabilities[y][x] = 0;
@@ -104,12 +100,7 @@ public class BattleshipProbabilityMap {
         }
 
         for (Coordinate coordinate : skewNoDuplicate) {
-            // poprawa strzelania po trafie zamina x y
-            /*if (!hits.contains(coordinate)) {
-                probabilities[coordinate.getX()][coordinate.getY()] *= skewFactor;
-            } else {
-                probabilities[coordinate.getX()][coordinate.getY()] = 0;
-            }*/
+
             if (!hits.contains(coordinate)) {
                 probabilities[coordinate.getY()][coordinate.getX()] *= skewFactor;
             } else {
@@ -121,9 +112,9 @@ public class BattleshipProbabilityMap {
     private List<Coordinate> getAdjacentPosition(Coordinate coordinate) {
 
         for (Coordinate coord : hits) {
-            if (coord.X == coordinate.X && coord.Y != coordinate.Y && (coord.Y - coordinate.Y) < 4) {
+            if (coord.X == coordinate.X && coord.Y != coordinate.Y && (coord.Y - coordinate.Y) <= 4) {
                 findPossibleShipPlacementsByY(coordinate);
-            } else if (coord.Y == coordinate.Y && coord.X != coordinate.X && (coord.X - coordinate.X) < 4) {
+            } else if (coord.Y == coordinate.Y && coord.X != coordinate.X && (coord.X - coordinate.X) <= 4) {
                 findPossibleShipPlacementsByX(coordinate);
             } else {
                 findPossibleShipPlacementsByX(coordinate);

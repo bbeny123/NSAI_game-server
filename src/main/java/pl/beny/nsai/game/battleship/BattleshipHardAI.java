@@ -13,10 +13,6 @@ public class BattleshipHardAI {
 
     private int fireStatus;
 
-    private int accurateHitX;
-
-    private int accurateHitY;
-
     private int[][] probabilities;
 
     private List<BattleshipProbabilityMap.Coordinate> hits = new ArrayList<>();
@@ -31,7 +27,7 @@ public class BattleshipHardAI {
             findBestPosition(probabilities);
             Coordinate coord = null;
             getHits(probabilityMap);
-            removeHitsFromShootPossible();
+
             if (bestCoords.size() > 1) {
                 int id = getRandomCoords(bestCoords.size());
                 coord = bestCoords.get(id);
@@ -42,17 +38,11 @@ public class BattleshipHardAI {
             fireStatus = board.fire(coord.getX(), coord.getY());
             if (fireStatus > 0) {
                 board.updateAvailableShipList(fireStatus);
+                board.markAsMissAroundSunkShip(coord.getX(), coord.getY());
             }
+
             return new BattleshipFireResponse(coord.getX(), coord.getY(), fireStatus, PLAYER_TURN);
         } throw new GamesException(GamesException.GamesErrors.AI_ERROR);
-    }
-
-    private void removeHitsFromShootPossible() {
-        for (Coordinate coordinate : bestCoords) {
-            if (hits.contains(coordinate)) {
-                bestCoords.remove(coordinate);
-            }
-        }
     }
 
     private void getHits(BattleshipProbabilityMap probabilityMap) {
@@ -101,14 +91,6 @@ public class BattleshipHardAI {
 
         public int getY() {
             return Y;
-        }
-
-        @Override
-        public String toString() {
-            return "Coordinate{" +
-                    "X=" + X +
-                    ", Y=" + Y +
-                    '}';
         }
     }
 }
