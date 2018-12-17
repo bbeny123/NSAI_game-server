@@ -17,6 +17,8 @@ import static pl.beny.nsai.util.GamesException.GamesErrors.*;
 
 //instance of CheckersBoard (1 per game)
 public class CheckersBoard {
+    //number of done turns
+    private int turns = 0;
 
     //array of CheckersMan
     private CheckersMan[][] board = new CheckersMan[8][8];
@@ -97,6 +99,7 @@ public class CheckersBoard {
             move(source, target, result);       //move checker from source to target
         }
 
+        turns += 1;
         return result;
     }
 
@@ -270,4 +273,9 @@ public class CheckersBoard {
         return getCheckers(side).stream().filter(checker -> checker.side == side && checker.type == type).collect(Collectors.toList());
     }
 
+
+    //returns number of done turns
+    public int getTurns() {
+        return turns;
+    }
 }

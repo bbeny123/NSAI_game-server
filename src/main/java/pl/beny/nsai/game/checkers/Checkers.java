@@ -18,7 +18,8 @@ public class Checkers extends Game {
     //available game difficulties
     public enum Difficulty {
         OloAI,
-        MinMax
+        MinMax,
+        MinMaxFuzzy
     }
 
     private CheckersBoard board = new CheckersBoard();  //instance of checkers board
@@ -49,7 +50,10 @@ public class Checkers extends Game {
             if (difficulty == Difficulty.OloAI) {
                 result = CheckersOloAI.moveAI(board, forcedCapture);
             } else if (difficulty == Difficulty.MinMax) {
-                result = new MinMaxAlgorithm(BLACK).makeMove(board, forcedCapture);
+                //temp
+                result = new MinMaxAlgorithm(BLACK, true).makeMove(board, forcedCapture);
+            } else if (difficulty == Difficulty.MinMaxFuzzy) {
+                result = new MinMaxAlgorithm(BLACK, true).makeMove(board, forcedCapture);
             }
 
             results.add(endTurn(result));
