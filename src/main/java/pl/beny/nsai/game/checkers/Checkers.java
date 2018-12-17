@@ -51,7 +51,7 @@ public class Checkers extends Game {
                 result = CheckersOloAI.moveAI(board, forcedCapture);
             } else if (difficulty == Difficulty.MinMax) {
                 //temp
-                result = new MinMaxAlgorithm(BLACK, true).makeMove(board, forcedCapture);
+                result = new MinMaxAlgorithm(BLACK).makeMove(board, forcedCapture);
             } else if (difficulty == Difficulty.MinMaxFuzzy) {
                 result = new MinMaxAlgorithm(BLACK, true).makeMove(board, forcedCapture);
             }
