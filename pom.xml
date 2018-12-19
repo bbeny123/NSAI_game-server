@@ -24,6 +24,7 @@
         <oauth2.version>2.1.1.RELEASE</oauth2.version>
         <postgresql.version>42.2.5</postgresql.version>
         <thymeleaf.extras.version>3.0.4.RELEASE</thymeleaf.extras.version>
+        <fuzzy.version>3.0.0</fuzzy.version>
     </properties>
 
     <dependencies>
@@ -80,6 +81,12 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
             <version>${thymeleaf.extras.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.jFuzzyLogic</groupId>
+            <artifactId>jFuzzyLogic</artifactId>
+            <version>${fuzzy.version}</version>
         </dependency>
     </dependencies>
 
