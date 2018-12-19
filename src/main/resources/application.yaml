@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url:
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password:
+    password: postgres
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL82Dialect
     properties.hibernate.temp.use_jdbc_metadata_defaults: false
-    hibernate.ddl-auto: none
+    hibernate.ddl-auto: create
     show-sql: true
     open-in-view: true
   mail:
@@ -34,4 +34,6 @@ captcha:
   secret:
   site:
 registration:
-  url: http://localhost:8080/register/activate?token=
+  mail:
+    enable: false
+    url: http://localhost:8081/register/activate?token=
