@@ -11,7 +11,6 @@ public class CheckersResult {
         int WHITE_WON = 1;
         int BLACK_TURN = 2;
         int BLACK_WON = 3;
-        int TIE = 4;
     }
 
     private CheckersMan source;             //move source CheckersMan

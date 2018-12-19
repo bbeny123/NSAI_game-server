@@ -74,12 +74,10 @@ public class Checkers extends Game {
             status = BLACK_WON;
         } else if (board.getCheckers(BLACK).isEmpty()) {
             status = WHITE_WON;
-        } else if (!whiteMoves && !blackMoves) {
-            status = TIE;
         } else if (status == WHITE_TURN && !whiteMoves) {
-            status = BLACK_TURN;
+            status = BLACK_WON;
         } else if (status == BLACK_TURN && !blackMoves) {
-            status = WHITE_TURN;
+            status = WHITE_WON;
         }
 
         result.setStatus(status);

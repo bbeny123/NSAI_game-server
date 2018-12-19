@@ -70,7 +70,8 @@ public class Battleship extends Game {
 
     //validates and executes player fireRequest
     public BattleshipFireResponse fire(BattleshipFireRequest fireRequest) throws GamesException {
-        if (STATUS != BattleshipStatus.BATTLE) throw new GamesException(BATTLESHIP_NOT_BATTLE); //check if game is in BATTLE phase
+        if (STATUS != BattleshipStatus.BATTLE) throw new GamesException(BATTLESHIP_NOT_BATTLE);             //check if game is in BATTLE phase
+        if (FIRE_TURN != BattleshipFireTurn.PLAYER_TURN) throw new GamesException(BATTLESHIP_WRONG_TURN);   //check if it is PLAYER_TURN
 
         int result = computer.getBoard().fire(fireRequest.getX(), fireRequest.getY());          //get result of fireRequest (values: pl.beny.nsai.game.battleship.BattleshipBoard.BoardStatus)
         if (result > 0 && computer.getShips().destroyShip() <= 0) {                             //check if result indicates that some ship was sunk and AI has no more ships

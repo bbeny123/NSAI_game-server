@@ -24,7 +24,8 @@ public class GamesException extends RuntimeException {
         BATTLESHIP_PLACE_FIRED(105, "This place was already fired", HttpStatus.BAD_REQUEST),
         BATTLESHIP_NOT_PREPARING(106, "You can not place ship outside PREPARING phase", HttpStatus.BAD_REQUEST),
         BATTLESHIP_NOT_BATTLE(107, "You can not fire outside BATTLE phase", HttpStatus.BAD_REQUEST),
-        BATTLESHIP_DIAGONAL(108, "You can not place ships diagonally", HttpStatus.BAD_REQUEST),
+        BATTLESHIP_WRONG_TURN(108, "You can fire only in your turn", HttpStatus.FORBIDDEN),
+        BATTLESHIP_DIAGONAL(109, "You can not place ships diagonally", HttpStatus.BAD_REQUEST),
 
         CHECKERS_NO_MAN(151, "There is no man at this position", HttpStatus.BAD_REQUEST),
         CHECKERS_OPPOSITE_MAN(152, "This is no player's man", HttpStatus.BAD_REQUEST),

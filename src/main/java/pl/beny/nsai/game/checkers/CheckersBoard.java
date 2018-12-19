@@ -85,18 +85,20 @@ public class CheckersBoard {
         valid(source, target, side);    //check if given move is valid
 
         List<CheckersMan> captureMoves = getCaptureMoves(source);   //get all move with capture for source checker
-
         CheckersResult result = new CheckersResult();
-        result.setStatus(side == WHITE ? BLACK_TURN : WHITE_TURN);  //set next turn for opposite side
 
         //check if requested move equals to one of the captureMoves (if captureMoves not empty)
         if (!captureMoves.isEmpty() && captureMoves.stream().noneMatch(move -> target.x == move.x && target.y == move.y)) {
             throw new GamesException(CHECKERS_CAPTURE_FORCED);
-        } else if (!captureMoves.isEmpty()) {
+        }
+
+        if (!captureMoves.isEmpty()) {
+            result.setStatus(side == WHITE ? BLACK_TURN : WHITE_TURN);  //set next turn for opposite side
             capture(source, target, result, side);  //move (with capture) checker from source to target
         } else {
             validMove(source, target, side);    //check if given non capture move is valid
             move(source, target, result);       //move checker from source to target
+            result.setStatus(side == WHITE ? BLACK_TURN : WHITE_TURN);  //set next turn for opposite side
         }
 
         turns += 1;
